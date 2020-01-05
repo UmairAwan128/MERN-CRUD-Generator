@@ -1,0 +1,8 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const createService = require("./services/sampleRecord");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const config = require('./config.js')
+
+const authRoute = require('./routes/auth');

@@ -1,0 +1,12 @@
+
+
+            <Redirect to="/not-found" />
+          </Switch>
+        </main>
+
+      </React.Fragment>
+    );
+  }
+}
+
+export default App;

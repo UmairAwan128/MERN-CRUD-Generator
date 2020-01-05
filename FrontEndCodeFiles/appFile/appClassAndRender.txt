@@ -1,0 +1,30 @@
+
+class App extends Component {
+
+  state = {};
+  //we wanted to show currently loggedin userName to the Navbar so we get user set in state and passed to Navbar component
+  componentDidMount() {
+    this.getCurrentUser();
+  }
+
+  getCurrentUser = async () => {
+    try {
+      const {data:user} = await auth.getCurrentUser();
+      this.setState({ user });
+    }
+    catch (ex) {
+      console.log(ex.message);
+    }
+  };
+
+  render() {
+    return (
+      <React.Fragment>
+        <Navbar user={this.state.user} />
+        <main role="main" className="container">
+          <Switch>
+            <Route path="/login" component={LoginForm} />
+            <Route path="/logout" component={Logout} />
+            <Route path="/register" component={RegisterForm} />      
+            
+            {/* following is a protected route only loggedIn user can access it */}

@@ -1,0 +1,11 @@
+          
+            <Pagination
+              itemsCount={totalCount}
+              pageSize={this.state.pageSize}
+              onPageChange={this.handlePageChange}
+              currentPage={this.state.currentPage}
+            />
+      </React.Fragment>
+    );
+  }
+}

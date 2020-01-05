@@ -1,0 +1,15 @@
+            <Route
+                path="/profile"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <ProfileForm {...props} user={this.state.user} />;
+                }}
+            />
+            <Route
+                path="/updatePassword/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <PasswordResetForm {...props} user={this.state.user} />;
+                }}
+            />
+            <Route path="/not-found" component={NotFound} />

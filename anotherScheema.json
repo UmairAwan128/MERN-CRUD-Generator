@@ -1,0 +1,10 @@
+{
+    "tableName":"Post",
+    "columns":[
+      { "id": 1, "label": "id", "type": "number" },
+      { "id": 2, "label": "title", "type": "text" },
+      { "id": 3, "label": "userId", "type": "number" },
+      { "id": 4, "label": "body", "type": "text" }
+    ]
+}
+  

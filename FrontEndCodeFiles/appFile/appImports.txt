@@ -1,0 +1,11 @@
+import React, { Component } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import "./App.css";
+import NotFound from "./components/notFound";
+import Navbar from "./components/navbar";
+import LoginForm from "./components/loginForm";
+import RegisterForm from "./components/registerForm";
+import ProfileForm from "./components/profileForm";
+import PasswordResetForm from "./components/passwordResetForm";
+import Logout from "./components/logout";
+import auth from "./services/authService";

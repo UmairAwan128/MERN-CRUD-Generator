@@ -1,0 +1,20 @@
+
+
+  handlePageChange = pageNo => {
+    this.setState({ currentPage: pageNo });
+  };
+
+  getPagedData = () => {
+    
+    const {
+      pageSize,
+      currentPage,
+      records
+    } = this.state;
+    
+    const paginatedRecords = paginate(records, currentPage, pageSize);
+    
+    return { totalCount: !records.length ? 0 : records.length, data: paginatedRecords };
+  
+  };
+

@@ -1,0 +1,16 @@
+
+//YOUR DATABASE WITH A SAMPLE RECORD
+mongoose
+  .connect(config.DB_CONNECTION, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+  })
+  .then(() => console.log("Connected to your MongoDB."))
+  .catch(err => {
+    console.log("Failed to connected to DB Error: "+ err.message);
+  });
+
+  let createServiceObj = null;
+  createServiceObj = createService.getInstance();
+  createServiceObj.createSampleUser();
+  
