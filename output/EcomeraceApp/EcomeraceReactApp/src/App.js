@@ -11,12 +11,22 @@ import Logout from "./components/logout";
 import auth from "./services/authService";
 import Products from "./components/products";
 import ProductForm from "./components/productForm";
+import ProductDetails from "./components/productDetails";
 import Categorys from "./components/categorys";
 import CategoryForm from "./components/categoryForm";
+import CategoryDetails from "./components/categoryDetails";
 import Orders from "./components/orders";
 import OrderForm from "./components/orderForm";
+import OrderDetails from "./components/orderDetails";
 import Statuss from "./components/statuss";
 import StatusForm from "./components/statusForm";
+import StatusDetails from "./components/statusDetails";
+import Customers from "./components/customers";
+import CustomerForm from "./components/customerForm";
+import CustomerDetails from "./components/customerDetails";
+import Supliers from "./components/supliers";
+import SuplierForm from "./components/suplierForm";
+import SuplierDetails from "./components/suplierDetails";
 
 class App extends Component {
 
@@ -55,6 +65,13 @@ class App extends Component {
                 }}
             />
             <Route
+                path="/viewProduct/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <ProductDetails {...props} />;
+                }}
+            />
+            <Route
                 path="/products"
                 render={props => {
                   if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
@@ -67,6 +84,13 @@ class App extends Component {
                 render={props => {
                   if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
                   return <CategoryForm {...props} />;
+                }}
+            />
+            <Route
+                path="/viewCategory/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <CategoryDetails {...props} />;
                 }}
             />
             <Route
@@ -85,6 +109,13 @@ class App extends Component {
                 }}
             />
             <Route
+                path="/viewOrder/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <OrderDetails {...props} />;
+                }}
+            />
+            <Route
                 path="/orders"
                 render={props => {
                   if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
@@ -100,10 +131,61 @@ class App extends Component {
                 }}
             />
             <Route
+                path="/viewStatus/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <StatusDetails {...props} />;
+                }}
+            />
+            <Route
                 path="/statuss"
                 render={props => {
                   if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
                   return <Statuss {...props} />;
+                }}
+            />
+
+            <Route
+                path="/customers/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <CustomerForm {...props} />;
+                }}
+            />
+            <Route
+                path="/viewCustomer/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <CustomerDetails {...props} />;
+                }}
+            />
+            <Route
+                path="/customers"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <Customers {...props} />;
+                }}
+            />
+
+            <Route
+                path="/supliers/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <SuplierForm {...props} />;
+                }}
+            />
+            <Route
+                path="/viewSuplier/:id"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <SuplierDetails {...props} />;
+                }}
+            />
+            <Route
+                path="/supliers"
+                render={props => {
+                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;
+                  return <Supliers {...props} />;
                 }}
             />
 

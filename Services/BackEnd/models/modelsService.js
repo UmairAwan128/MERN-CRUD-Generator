@@ -27,7 +27,7 @@ class modelsService {
         if (err) {
           console.log(err);
         } else {
-          console.log("Sccessfully created " + fileName + " file");
+          //console.log("Sccessfully created " + fileName + " file");
         }
       });
       return true;

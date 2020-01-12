@@ -60,7 +60,7 @@ class Categorys extends Component{
               <div className="col-sm-5">
                     <Link
                       to="/categorys/new"
-                      className="btn btn-primary"
+                      className="btn btn-primary custom-btn"
                       style={{ marginBottom: 20 }}
                     >
                      New Category
@@ -82,7 +82,7 @@ class Categorys extends Component{
                 <thead>
                     <tr>
                     <th scope="col" key="1" style={{ cursor: "pointer" }}>
-                      Name
+                      CatName
                     </th>
                     <th scope="col" key="2" style={{ cursor: "pointer" }}>
                       Type
@@ -95,9 +95,15 @@ class Categorys extends Component{
                 <tbody>
                   {paginatedCategorys.map(record => (
                     <tr key={record._id}>
-                      <td key="1">{record.Name}</td>
+                      <td key="1">{record.CatName}</td>
                       <td key="2">{record.Type}</td>
                       <td key="3">
+                              <Link
+                                to={`/viewcategory/${record._id}`}
+                                className="btn btn-info btn-sm m-1"
+                                >
+                                View
+                              </Link>
                               <Link
                                 to={`/categorys/${record._id}`}
                                 className="btn btn-warning btn-sm m-1"

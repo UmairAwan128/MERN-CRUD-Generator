@@ -37,6 +37,7 @@ class appFileCodeService {
             tblName = scheema[tableId].tableName; 
             code = code.concat('import '+ tblName +'s from "./components/'+ tblName.toLowerCase() +'s";\n');
             code = code.concat('import '+ tblName +'Form from "./components/'+ tblName.toLowerCase() +'Form";\n');
+            code = code.concat('import '+ tblName +'Details from "./components/'+ tblName.toLowerCase() +'Details";\n');
         }    
     }
     return code;
@@ -68,6 +69,13 @@ class appFileCodeService {
             code = code.concat('                render={props => {\n');
             code = code.concat('                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;\n');
             code = code.concat('                  return <'+ tblName +'Form {...props} />;\n');
+            code = code.concat('                }}\n');
+            code = code.concat('            />\n');
+            code = code.concat('            <Route\n');
+            code = code.concat('                path="/view'+ tblName+'/:id"\n');
+            code = code.concat('                render={props => {\n');
+            code = code.concat('                  if (!auth.isUserLoggedIn()) return <Redirect to="/login" />;\n');
+            code = code.concat('                  return <'+ tblName +'Details {...props} />;\n');
             code = code.concat('                }}\n');
             code = code.concat('            />\n');
             code = code.concat('            <Route\n');

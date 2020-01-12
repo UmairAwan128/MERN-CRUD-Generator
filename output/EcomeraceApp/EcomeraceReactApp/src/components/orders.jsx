@@ -60,7 +60,7 @@ class Orders extends Component{
               <div className="col-sm-5">
                     <Link
                       to="/orders/new"
-                      className="btn btn-primary"
+                      className="btn btn-primary custom-btn"
                       style={{ marginBottom: 20 }}
                     >
                      New Order
@@ -88,27 +88,15 @@ class Orders extends Component{
                       OrderDate
                     </th>
                     <th scope="col" key="3" style={{ cursor: "pointer" }}>
-                      Comments
-                    </th>
-                    <th scope="col" key="4" style={{ cursor: "pointer" }}>
-                      Email
-                    </th>
-                    <th scope="col" key="5" style={{ cursor: "pointer" }}>
-                      Password
-                    </th>
-                    <th scope="col" key="6" style={{ cursor: "pointer" }}>
-                      Phone
-                    </th>
-                    <th scope="col" key="7" style={{ cursor: "pointer" }}>
                       User
                     </th>
-                    <th scope="col" key="8" style={{ cursor: "pointer" }}>
+                    <th scope="col" key="4" style={{ cursor: "pointer" }}>
                       Status
                     </th>
-                    <th scope="col" key="9" style={{ cursor: "pointer" }}>
+                    <th scope="col" key="5" style={{ cursor: "pointer" }}>
                       Selected Products
                     </th>
-                    <th scope="col" key="10" style={{ cursor: "pointer" }}>
+                    <th scope="col" key="6" style={{ cursor: "pointer" }}>
                       Actions
                     </th>
                   </tr>
@@ -118,14 +106,16 @@ class Orders extends Component{
                     <tr key={record._id}>
                       <td key="1">{record.OrderName}</td>
                       <td key="2">{record.OrderDate}</td>
-                      <td key="3">{record.Comments}</td>
-                      <td key="4">{record.Email}</td>
-                      <td key="5">{record.Password}</td>
-                      <td key="6">{record.Phone}</td>
-                      <td key="7">{record.User.name}</td>
-                      <td key="8">{record.Status.Name}</td>
-                      <td key="9">{record.Products.length}</td>
-                      <td key="10">
+                      <td key="3">{record.User.Name}</td>
+                      <td key="4">{record.Status.Name}</td>
+                      <td key="5">{record.Products.length}</td>
+                      <td key="6">
+                              <Link
+                                to={`/vieworder/${record._id}`}
+                                className="btn btn-info btn-sm m-1"
+                                >
+                                View
+                              </Link>
                               <Link
                                 to={`/orders/${record._id}`}
                                 className="btn btn-warning btn-sm m-1"

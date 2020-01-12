@@ -83,7 +83,7 @@ class tableCodeService {
         code += '              <div className="col-sm-5">\n';
         code += '                    <Link\n';
         code += '                      to="/'+tblName.toLowerCase()+'s/new"\n';
-        code += '                      className="btn btn-primary"\n';
+        code += '                      className="btn btn-primary custom-btn"\n';
         code += '                      style={{ marginBottom: 20 }}\n';
         code += '                    >\n';
         code += '                     New '+tblName+'\n';
@@ -133,12 +133,12 @@ class tableCodeService {
               '" style={{ cursor: "pointer" }}>\n                      '
           );
 
-          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"){
+          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
             tableCode = tableCode.concat(
               "Selected "+ tblRelations[index].tableName + "s\n                    </th>\n"
             );
           }
-          else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"){
+          else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"  || tblRelations[index].type.toLowerCase() == "onetomany"){
             tableCode = tableCode.concat(
               tblRelations[index].tableName + "\n                    </th>\n"
             );
@@ -178,14 +178,14 @@ class tableCodeService {
           '                      <td key="' + keyValue + '">'
         );
 
-        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"){
+        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"  || tblRelations[index].type.toLowerCase() == "manytomany"){
           tableCode = tableCode.concat(
             "{record." + tblRelations[index].tableName + "s.length}</td>\n"
           );
         }
-        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"){
+        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"  || tblRelations[index].type.toLowerCase() == "onetomany"){
           tableCode = tableCode.concat(
-            "{record." + tblRelations[index].tableName + "." + dataProperty.name + "}</td>\n"
+            "{record." + tblRelations[index].tableName + ".Name}</td>\n"
           );
         }
       }
@@ -193,6 +193,12 @@ class tableCodeService {
 
     tableCode = tableCode.concat('                      <td key="' + (keyValue + 1) + '">\n');
     tableCode = tableCode.concat(
+      "                              <Link\n" + 
+      "                                to={`/view"+ tblName.toLowerCase() +"/${record._id}`}\n" + 
+      '                                className="btn btn-info btn-sm m-1"\n' + 
+      '                                >\n' + 
+      '                                View\n' + 
+      '                              </Link>\n' + 
       "                              <Link\n" + 
       "                                to={`/"+ tblName.toLowerCase() +"s/${record._id}`}\n" + 
       '                                className="btn btn-warning btn-sm m-1"\n' + 

@@ -60,7 +60,7 @@ class Products extends Component{
               <div className="col-sm-5">
                     <Link
                       to="/products/new"
-                      className="btn btn-primary"
+                      className="btn btn-primary custom-btn"
                       style={{ marginBottom: 20 }}
                     >
                      New Product
@@ -82,16 +82,16 @@ class Products extends Component{
                 <thead>
                     <tr>
                     <th scope="col" key="1" style={{ cursor: "pointer" }}>
-                      Name
-                    </th>
-                    <th scope="col" key="2" style={{ cursor: "pointer" }}>
                       Price
                     </th>
-                    <th scope="col" key="3" style={{ cursor: "pointer" }}>
+                    <th scope="col" key="2" style={{ cursor: "pointer" }}>
                       Quantity
                     </th>
+                    <th scope="col" key="3" style={{ cursor: "pointer" }}>
+                      ProdName
+                    </th>
                     <th scope="col" key="4" style={{ cursor: "pointer" }}>
-                      Selected Categorys
+                      Category
                     </th>
                     <th scope="col" key="5" style={{ cursor: "pointer" }}>
                       Actions
@@ -101,11 +101,17 @@ class Products extends Component{
                 <tbody>
                   {paginatedProducts.map(record => (
                     <tr key={record._id}>
-                      <td key="1">{record.Name}</td>
-                      <td key="2">{record.Price}</td>
-                      <td key="3">{record.Quantity}</td>
-                      <td key="4">{record.Categorys.length}</td>
+                      <td key="1">{record.Price}</td>
+                      <td key="2">{record.Quantity}</td>
+                      <td key="3">{record.ProdName}</td>
+                      <td key="4">{record.Category.Name}</td>
                       <td key="5">
+                              <Link
+                                to={`/viewproduct/${record._id}`}
+                                className="btn btn-info btn-sm m-1"
+                                >
+                                View
+                              </Link>
                               <Link
                                 to={`/products/${record._id}`}
                                 className="btn btn-warning btn-sm m-1"

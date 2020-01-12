@@ -27,7 +27,7 @@ class authFilesService {
         if (err) {
           console.log(err);
         } else {
-          console.log("Sccessfully created " + fileNameWithExt + " file. ");
+          //console.log("Sccessfully created " + fileNameWithExt + " file. ");
         }
       });
       return true;

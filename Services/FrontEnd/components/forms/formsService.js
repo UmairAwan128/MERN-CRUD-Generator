@@ -26,7 +26,7 @@ class formsService {
         if (err) {
           console.log(err);
         } else {
-          console.log("Sccessfully created form file");
+          //console.log("Sccessfully created form file");
         }
       });
       return true;

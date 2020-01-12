@@ -5,12 +5,12 @@
                 Please Login or Register to access your app -->
               </span>
               <span className="nav-item">
-                <NavLink className="nav-link" to="/login">
+                <NavLink className="nav-link custom-nav-link" to="/login">
                   Login
                 </NavLink>
               </span>
               <span className="nav-item">
-                <NavLink className="nav-link" to="/register">
+                <NavLink className="nav-link custom-nav-link" to="/register">
                   Register
                 </NavLink>
               </span>
@@ -19,23 +19,23 @@
     
           {user && (
             <div className="dropdown-container">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a className="nav-link custom-nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Actions
                 </a>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={{ marginLeft : "-60px" }}>
+                <div className="dropdown-menu  nav-dropdown" aria-labelledby="navbarDropdown">
                     <span className="nav-item dropdown-item">
-                        <NavLink className="nav-link" style={{padding:"initial"}} to="/profile">
+                        <NavLink className="nav-link custom-nav-link" style={{padding:"initial"}} to="/profile">
                           {user.name}
                         </NavLink>
                     </span>
                     <span className="nav-item dropdown-item">
-                        <NavLink className="nav-link" style={{padding:"initial"}} to={`/updatePassword/${user._id}`}>
+                        <NavLink className="nav-link custom-nav-link" style={{padding:"initial"}} to={`/updatePassword/${user._id}`}>
                           Change Password
                         </NavLink>
                     </span>
                     <div className="dropdown-divider"></div>
                     <span className="nav-item dropdown-item">
-                        <NavLink className="nav-link" style={{padding:"initial"}} to="/logout">
+                        <NavLink className="nav-link custom-nav-link" style={{padding:"initial"}} to="/logout">
                           Logout
                         </NavLink>
                     </span>

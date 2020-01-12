@@ -63,9 +63,9 @@ class appFileCodeService {
   getAppFileRemains(scheema) {
     var filePath = appFilesFolderPath + "/appRemains.txt";
     var code = fs.readFileSync(path.resolve(filePath), "utf8");
-    if(scheema.length !== 0 ){
-      code = code.concat('  createServiceObj.createSampleRecord();\n\n');
-    }  
+    // if(scheema.length !== 0 ){
+    //   code = code.concat('  createServiceObj.createSampleRecord();\n\n');
+    // }  
     code = code.concat("app.listen(5000,()=> console.log('listening on port 5000'));\n");
     return code;
   }

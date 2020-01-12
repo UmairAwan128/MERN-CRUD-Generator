@@ -9,28 +9,29 @@ const { registerValidation, loginValidation } = require("../services/validation"
 
 router.post('/register', async (req,res)=>{
 
-    //validate data before creating user using the JOI.
-    const {error} = registerValidation(req.body);
-    if(error)
-      res.status(400).send(error.details[0].message);
-    
-    //check if email is already in DB i.e should be unique
-    const emailExist = await User.findOne( { email:req.body.email } );
-    if(emailExist)
-      res.status(400).send("Email already exist try another one.");
-    
-    //Hash Password
-    const salt = await bcrypt.genSalt(10); 
-    const hashedPassword = await bcrypt.hash( req.body.password, salt ); 
-
-    const user = new User({
-        name:req.body.name,
-        email:req.body.email,
-        password:hashedPassword 
-    });
     try{
-       const savedUser = await user.save();
-       res.send({ user : savedUser._id}); 
+        //validate data before creating user using the JOI.
+        const {error} = registerValidation(req.body);
+        if(error)
+          res.status(400).send(error.details[0].message);
+        
+        //check if email is already in DB i.e should be unique
+        const emailExist = await User.findOne( { email:req.body.email } );
+        if(emailExist)
+          res.status(400).send("Email already exist try another one.");
+        
+        //Hash Password
+        const salt = await bcrypt.genSalt(10); 
+        const hashedPassword = await bcrypt.hash( req.body.password, salt ); 
+
+        const user = new User({
+            name:req.body.name,
+            email:req.body.email,
+            password:hashedPassword 
+        });
+  
+        const savedUser = await user.save();
+        res.send({ user : savedUser._id}); 
     }
     catch(err){
        res.status(400).json({ message: ex.message });

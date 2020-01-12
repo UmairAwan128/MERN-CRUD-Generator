@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const StatusScheema = mongoose.Schema({
-  Name: {
+  StatName: {
     type: String,
     required: true
   },

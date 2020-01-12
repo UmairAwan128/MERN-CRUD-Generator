@@ -10,6 +10,8 @@ const ProductsRoute = require("./routes/Products");
 const CategorysRoute = require("./routes/Categorys");
 const OrdersRoute = require("./routes/Orders");
 const StatussRoute = require("./routes/Statuss");
+const CustomersRoute = require("./routes/Customers");
+const SupliersRoute = require("./routes/Supliers");
 
 const app = express();
 app.use(cors());
@@ -21,6 +23,8 @@ app.use("/api/products", ProductsRoute);
 app.use("/api/categorys", CategorysRoute);
 app.use("/api/orders", OrdersRoute);
 app.use("/api/statuss", StatussRoute);
+app.use("/api/customers", CustomersRoute);
+app.use("/api/supliers", SupliersRoute);
 
 //YOUR DATABASE WITH A SAMPLE RECORD
 mongoose
@@ -36,6 +40,4 @@ mongoose
   let createServiceObj = null;
   createServiceObj = createService.getInstance();
   createServiceObj.createSampleUser();
-    createServiceObj.createSampleRecord();
-
-app.listen(5000,()=> console.log('listening on port 5000'));
+  app.listen(5000,()=> console.log('listening on port 5000'));

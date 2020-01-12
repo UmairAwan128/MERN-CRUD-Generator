@@ -60,7 +60,7 @@ class Statuss extends Component{
               <div className="col-sm-5">
                     <Link
                       to="/statuss/new"
-                      className="btn btn-primary"
+                      className="btn btn-primary custom-btn"
                       style={{ marginBottom: 20 }}
                     >
                      New Status
@@ -82,7 +82,7 @@ class Statuss extends Component{
                 <thead>
                     <tr>
                     <th scope="col" key="1" style={{ cursor: "pointer" }}>
-                      Name
+                      StatName
                     </th>
                     <th scope="col" key="2" style={{ cursor: "pointer" }}>
                       Actions
@@ -92,8 +92,14 @@ class Statuss extends Component{
                 <tbody>
                   {paginatedStatuss.map(record => (
                     <tr key={record._id}>
-                      <td key="1">{record.Name}</td>
+                      <td key="1">{record.StatName}</td>
                       <td key="2">
+                              <Link
+                                to={`/viewstatus/${record._id}`}
+                                className="btn btn-info btn-sm m-1"
+                                >
+                                View
+                              </Link>
                               <Link
                                 to={`/statuss/${record._id}`}
                                 className="btn btn-warning btn-sm m-1"

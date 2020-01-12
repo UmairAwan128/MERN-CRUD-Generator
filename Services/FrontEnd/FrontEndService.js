@@ -3,7 +3,9 @@ const fs = require("fs");
 const appFileService = require("./appFile/appFileService");
 const tableService = require("./components/table/tableServices");
 const formsService = require("./components/forms/formsService");
+const detailsService = require("./components/details/detailsService");
 const srcFilesService = require("./srcFilesService");
+const cssFileService = require("./cssFileService");
 const serviceFolderFilesGeneratorService = require("./services/serviceFolderFilesGeneratorService");
 const utilsFolderFilesServiceService = require("./utilsFolderFilesService");
 const publicService = require("./publicFilesServices");
@@ -16,7 +18,9 @@ let instance = null;
 let appFileServiceObj = null;
 let tblServiceObj = null;
 let formServiceObj = null;
+let detailsServiceObj = null;
 let srcFilesServiceObj = null;
+let cssFileServiceObj = null;
 let serviceFolderFilesGeneratorObj = null;
 let utilsFolderFilesServiceServiceobj = null;
 let publicServiceObj = null;
@@ -31,6 +35,7 @@ class FrontEndService {
     tblServiceObj = tableService.getInstance();
     formServiceObj = formsService.getInstance();
     srcFilesServiceObj = srcFilesService.getInstance();
+    cssFileServiceObj = cssFileService.getInstance();
     serviceFolderFilesGeneratorObj = serviceFolderFilesGeneratorService.getInstance();
     publicServiceObj = publicService.getInstance();
     mainFolderServiceObj = mainFolderFilesService.getInstance();
@@ -38,6 +43,7 @@ class FrontEndService {
     otherComponentsServiceObj = otherComponentsService.getInstance();
     utilsFolderFilesServiceServiceobj = utilsFolderFilesServiceService.getInstance();
     packageFileServiceObj = packageFileService.getInstance();
+    detailsServiceObj = detailsService.getInstance();
   }
 
   static getInstance() {
@@ -47,28 +53,28 @@ class FrontEndService {
     return instance;
   }
 
-  generateFrontEnd(scheema, folderName) {
+  generateFrontEnd(scheema, projectFolderPath) {
     try {
         let FilesGenerated = true;
         //.....................CRUD Releated Folder.....................................
         
         //.............create Project folder if not exist
-        let projectFolderPath = "./" + folderName;
         if (!fs.existsSync(projectFolderPath)) {
           fs.mkdirSync(projectFolderPath);
         }
+
         //.............create the src folder
-        let srcFolderPath = "./" + folderName + "/src";
+        let srcFolderPath = projectFolderPath + "/src";
         if (!fs.existsSync(srcFolderPath)) {
           fs.mkdirSync(srcFolderPath);
         }
         //.............create the services folder
-        let serviceFolderPath = "./" + srcFolderPath + "/services";
+        let serviceFolderPath = srcFolderPath + "/services";
         if (!fs.existsSync(serviceFolderPath)) {
           fs.mkdirSync(serviceFolderPath);
         }
         //.............create the components folder
-        let componentsFolderPath = "./" + srcFolderPath + "/components";
+        let componentsFolderPath = srcFolderPath + "/components";
         if (!fs.existsSync(componentsFolderPath)) {
           fs.mkdirSync(componentsFolderPath);
         }
@@ -77,17 +83,17 @@ class FrontEndService {
         //.....................Other Folders.....................................
         
         //.............create the public folder
-        let publicFolderPath = "./" + folderName + "/public";
+        let publicFolderPath = projectFolderPath + "/public";
         if (!fs.existsSync(publicFolderPath)) {
           fs.mkdirSync(publicFolderPath);
         }
         //.............create the utils folder
-        let utilsFolderPath = "./" + srcFolderPath + "/utils";
+        let utilsFolderPath = srcFolderPath + "/utils";
         if (!fs.existsSync(utilsFolderPath)) {
           fs.mkdirSync(utilsFolderPath);
         }
         //.............create the common components folder
-        let commonComponentsFolderPath = "./" + componentsFolderPath + "/common";
+        let commonComponentsFolderPath = componentsFolderPath + "/common";
         if (!fs.existsSync(commonComponentsFolderPath)) {
           fs.mkdirSync(commonComponentsFolderPath);
         }
@@ -147,11 +153,10 @@ class FrontEndService {
           "App.test",
           ".js"
         );
-        FilesGenerated = srcFilesServiceObj.generateSrcFolderFile(
+        FilesGenerated = cssFileServiceObj.generateCssFile(
           srcFolderPath,
           "index",
-          ".css",
-          "indexCss"
+          ".css"
         );
         FilesGenerated = srcFilesServiceObj.generateSrcFolderFile(
           srcFolderPath,
@@ -247,7 +252,12 @@ class FrontEndService {
             scheema[tableId],
             componentsFolderPath
           );
-          
+
+          FilesGenerated = detailsServiceObj.generateDetailsCRUDFile(
+            scheema[tableId],
+            componentsFolderPath
+          );
+
           //......................Services folder files
           
           FilesGenerated = serviceFolderFilesGeneratorObj.generateScheemaServiceFile(

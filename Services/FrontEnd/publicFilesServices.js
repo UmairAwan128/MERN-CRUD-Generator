@@ -25,7 +25,7 @@ class publicFilesServices {
         if (err) {
           console.log(err);
         } else {
-          console.log("Sccessfully created " + fileNameWithExt + " file. ");
+          //console.log("Sccessfully created " + fileNameWithExt + " file. ");
         }
       });
       return true;
@@ -40,7 +40,7 @@ class publicFilesServices {
       pngToIco("./icoFile/favicon.png")
         .then(buf => {
           fs.writeFileSync(folderPath + "/" + "favicon.ico", buf);
-          console.log("sucessfully generated favicon file.");
+          //console.log("sucessfully generated favicon file.");
         })
         .catch(console.error);
     } catch (e) {

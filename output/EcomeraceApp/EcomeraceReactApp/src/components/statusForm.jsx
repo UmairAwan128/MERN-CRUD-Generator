@@ -5,15 +5,15 @@ import { saveStatus, getStatus } from "../services/statusService";
 class createStatus extends Component{
 
   state = {
-    data: { Name: "", },
+    data: { StatName: "", },
     errors: {}
   };
 
   scheema = {
     _id: Joi.string(),
-    Name:  Joi.string()
+    StatName:  Joi.string()
       .required()
-      .label("Name"),
+      .label("StatName"),
     createdAt: Joi.date()
       .label("createAt")
   };
@@ -85,19 +85,19 @@ class createStatus extends Component{
         <form onSubmit={this.handleSubmit}>
 
           <div className="form-group">
-              <label htmlFor="Name">Name</label>
+              <label htmlFor="StatName">StatName</label>
               <input
-                value={this.state.data["Name"]}
+                value={this.state.data["StatName"]}
                 onChange={this.handleChange}
-                name="Name"
-                id="Name"
+                name="StatName"
+                id="StatName"
                 type="text"
                 className="form-control"
               />
-              {this.state.errors["Name"] && <div className="alert alert-danger">{this.state.errors["Name"]}</div>}
+              {this.state.errors["StatName"] && <div className="alert alert-danger">{this.state.errors["StatName"]}</div>}
           </div>
 
-          <button disabled={this.validate()} className="btn btn-primary">Save</button>
+          <button disabled={this.validate()} className="btn btn-primary custom-btn">Save</button>
 
         </form>
       </div>

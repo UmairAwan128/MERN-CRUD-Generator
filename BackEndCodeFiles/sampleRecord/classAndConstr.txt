@@ -21,7 +21,7 @@ class createServices {
     const hashedPassword = await bcrypt.hash( "password@1", salt ); 
   
     const sampleRecord = new User({
-      name: "user",
+      name: "sample user",
       email: "user@SampleApp.com",
       password: hashedPassword,
       isPublished: true,

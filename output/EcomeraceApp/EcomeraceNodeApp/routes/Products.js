@@ -16,16 +16,12 @@ router.get("/", verify, async (req, res) => {
 router.get("/:id", verify, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    let categoryIds = new Array();
-    for(var i=0; i<product.Categorys.length; i++){
-      categoryIds.push(product.Categorys[i].Id);
-    }
     res.json({
         _id: product._id,
-        Name: product.Name,
         Price: product.Price,
         Quantity: product.Quantity,
-        CategoryIds: categoryIds,
+        ProdName: product.ProdName,
+        CategoryId: product.Category.Id,
         createdAt: product.createdAt
     });
   } catch (ex) {
@@ -35,21 +31,15 @@ router.get("/:id", verify, async (req, res) => {
 
 router.post("/", verify, async (req, res) => {
   try {
-    let categorys = new Array();
-    for(var i=0; i<req.body.CategoryIds.length; i++){
-      const category = await Category.findById(req.body.CategoryIds[i]);
-      categorys.push(
-        {
-          Id: category._id,
-          Name: category.Name
-        }
-      );
-    }
+    const category = await Category.findById(req.body.CategoryId);
     const product = new Product ({
-        Name: req.body.Name,
         Price: req.body.Price,
         Quantity: req.body.Quantity,
-        Categorys: categorys,
+        ProdName: req.body.ProdName,
+        Category: {
+          Id: category._id,
+          Name: category.CatName
+        },
     });
     const savedProduct = await product.save();
     res.status(200).json(savedProduct);
@@ -69,24 +59,18 @@ router.delete("/:id", verify, async (req, res) => {
 
 router.put("/:id", verify, async (req, res) => {
   try {
-    let categorys = new Array();
-    for(var i=0; i<req.body.CategoryIds.length; i++){
-      const category = await Category.findById(req.body.CategoryIds[i]);
-      categorys.push(
-        {
-          Id: category._id,
-          Name: category.Name
-        }
-      );
-    }
+    const category = await Category.findById(req.body.CategoryId);
     const updatedProduct = await Product.updateOne(
       { _id: req.params.id },
       {
         $set:{
-             Name: req.body.Name,
              Price: req.body.Price,
              Quantity: req.body.Quantity,
-        Categorys: categorys,
+             ProdName: req.body.ProdName,
+             Category: {
+              Id: category._id,
+              Name: category.CatName
+             },
 
         }
       }

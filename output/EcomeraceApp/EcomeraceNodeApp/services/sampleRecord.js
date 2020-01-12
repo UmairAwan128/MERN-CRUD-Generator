@@ -1,7 +1,3 @@
-const Product = require("../models/Product");
-const Category = require("../models/Category");
-const Order = require("../models/Order");
-const Status = require("../models/Status");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");  //is used for hashing/encrypting password.
 
@@ -46,61 +42,6 @@ class createServices {
           }
         }
     } 
-  }
-
-  async createSampleRecord() {
-    const sampleProduct = new Product({
-      Name: "sampleName",
-      Price: 0,
-      Quantity: "sampleQuantity",
-      Categorys: [{
-        Id: "sampleId",
-        Name: "sampleName"
-      }],
-    });
-
-    const sampleCategory = new Category({
-      Name: "sampleName",
-      Type: "sampleType",
-    });
-
-    const sampleOrder = new Order({
-      OrderName: "sampleOrderName",
-      OrderDate: "1111-11-11T11:11:11.111+11:11",
-      Comments: "sampleComments",
-      Email: "sampleEmail",
-      Password: "samplePassword",
-      Phone: 0,
-      User: {
-        Id: "sampleId",
-        name: "samplename"
-      },
-      Status: {
-        Id: "sampleId",
-        Name: "sampleName"
-      },
-      Products: [{
-        Id: "sampleId",
-        Name: "sampleName"
-      }],
-    });
-
-    const sampleStatus = new Status({
-      Name: "sampleName",
-    });
-
-    try {
-      const resultProduct = await sampleProduct.save();
-      const resultCategory = await sampleCategory.save();
-      const resultOrder = await sampleOrder.save();
-      const resultStatus = await sampleStatus.save();
-      console.log("Your Database is created with a Sample Record");
-    }
-    catch (ex) {
-      for (property in ex.errors) {
-      console.log(ex.errors[property]);
-      }
-    }
   }
 
 }

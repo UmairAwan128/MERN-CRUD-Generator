@@ -8,7 +8,7 @@ import { getProducts } from "../services/productService";
 class createOrder extends Component{
 
   state = {
-    data: { OrderName: "", OrderDate: "", Comments: "", Email: "", Password: "", Phone: "", UserId: "", StatusId: "", ProductIds: [], },
+    data: { OrderName: "", OrderDate: "", UserId: "", StatusId: "", ProductIds: [], },
     Users: [],
     Statuss: [],
     Products: [],
@@ -23,18 +23,6 @@ class createOrder extends Component{
     OrderDate:  Joi.date()
       .required()
       .label("OrderDate"),
-    Comments:  Joi.string()
-      .allow('').allow(null)
-      .label("Comments"),
-    Email:  Joi.string().email()
-      .allow('').allow(null)
-      .label("Email"),
-    Password:  Joi.string()
-      .allow('').allow(null)
-      .label("Password"),
-    Phone:  Joi.number()
-      .required()
-      .label("Phone"),
     UserId:  Joi.string()
       .required()
       .label("UserId"),
@@ -171,58 +159,6 @@ class createOrder extends Component{
           </div>
 
           <div className="form-group">
-              <label htmlFor="Comments">Comments</label>
-              <input
-                value={this.state.data["Comments"]}
-                onChange={this.handleChange}
-                name="Comments"
-                id="Comments"
-                type="text"
-                className="form-control"
-              />
-              {this.state.errors["Comments"] && <div className="alert alert-danger">{this.state.errors["Comments"]}</div>}
-          </div>
-
-          <div className="form-group">
-              <label htmlFor="Email">Email</label>
-              <input
-                value={this.state.data["Email"]}
-                onChange={this.handleChange}
-                name="Email"
-                id="Email"
-                type="email"
-                className="form-control"
-              />
-              {this.state.errors["Email"] && <div className="alert alert-danger">{this.state.errors["Email"]}</div>}
-          </div>
-
-          <div className="form-group">
-              <label htmlFor="Password">Password</label>
-              <input
-                value={this.state.data["Password"]}
-                onChange={this.handleChange}
-                name="Password"
-                id="Password"
-                type="password"
-                className="form-control"
-              />
-              {this.state.errors["Password"] && <div className="alert alert-danger">{this.state.errors["Password"]}</div>}
-          </div>
-
-          <div className="form-group">
-              <label htmlFor="Phone">Phone</label>
-              <input
-                value={this.state.data["Phone"]}
-                onChange={this.handleChange}
-                name="Phone"
-                id="Phone"
-                type="number"
-                className="form-control"
-              />
-              {this.state.errors["Phone"] && <div className="alert alert-danger">{this.state.errors["Phone"]}</div>}
-          </div>
-
-          <div className="form-group">
               <label htmlFor="UserId">Select User</label>
               <select
                 value={this.state.data["UserId"]}
@@ -245,7 +181,7 @@ class createOrder extends Component{
 
           <div className="form-group">
             <section className="section-preview">
-              <label className="mr-2">Status Name : </label> 
+              <label className="mr-2">Status StatName : </label> 
               {this.state.Statuss.map(Status => (
                   <div key={Status._id} className="custom-control custom-radio custom-control-inline">
                     <input 
@@ -253,7 +189,7 @@ class createOrder extends Component{
                       className="custom-control-input" id={Status._id} name="StatusId" 
                       checked = {this.state.data["StatusId"] === Status._id ? true:false}
                     />
-                    <label className="custom-control-label" htmlFor={Status._id}>{Status.Name}</label>
+                    <label className="custom-control-label" htmlFor={Status._id}>{Status.StatName}</label>
                   </div>
                 ))}
             </section>
@@ -268,12 +204,12 @@ class createOrder extends Component{
                           className="custom-control-input" id={Product._id} name="ProductIds"
                           checked = {this.state.data["ProductIds"].includes(Product._id)}
                         />
-                        <label className="custom-control-label" htmlFor={Product._id}>{Product.Name}</label>
+                        <label className="custom-control-label" htmlFor={Product._id}>{Product.ProdName}</label>
                     </div>
                   ))}
               </section>
           </div>
-          <button disabled={this.validate()} className="btn btn-primary">Save</button>
+          <button disabled={this.validate()} className="btn btn-primary custom-btn">Save</button>
 
         </form>
       </div>

@@ -6,24 +6,25 @@ import { getCategorys } from "../services/categoryService";
 class createProduct extends Component{
 
   state = {
-    data: { Name: "", Price: "", Quantity: "", CategoryIds: [], },
+    data: { Price: "", Quantity: "", ProdName: "", CategoryId: "", },
     Categorys: [],
     errors: {}
   };
 
   scheema = {
     _id: Joi.string(),
-    Name:  Joi.string()
-      .required()
-      .label("Name"),
     Price:  Joi.number()
       .required()
       .label("Price"),
     Quantity:  Joi.string()
       .allow('').allow(null)
       .label("Quantity"),
-    CategoryIds:  Joi.array()
-      .label("CategoryIds"),
+    ProdName:  Joi.string()
+      .required()
+      .label("ProdName"),
+    CategoryId:  Joi.string()
+      .required()
+      .label("CategoryId"),
     createdAt: Joi.date()
       .label("createAt")
   };
@@ -94,37 +95,11 @@ class createProduct extends Component{
     this.props.history.push("/products");
   };
 
-  handleCheckBoxChange = event => {
-    const data = { ...this.state.data };
-    if(event.currentTarget.checked===true){
-      data[event.currentTarget.name].push(event.currentTarget.value);
-    }
-    else{
-      data[event.currentTarget.name] = data[event.currentTarget.name].filter(function(current){
-     return current !== event.currentTarget.value;
-     });
-   }
-     this.setState({ data: data});
-  };
-
   render() {
     return (
       <div className="content">
         <h1>Product Form</h1>
         <form onSubmit={this.handleSubmit}>
-
-          <div className="form-group">
-              <label htmlFor="Name">Name</label>
-              <input
-                value={this.state.data["Name"]}
-                onChange={this.handleChange}
-                name="Name"
-                id="Name"
-                type="text"
-                className="form-control"
-              />
-              {this.state.errors["Name"] && <div className="alert alert-danger">{this.state.errors["Name"]}</div>}
-          </div>
 
           <div className="form-group">
               <label htmlFor="Price">Price</label>
@@ -153,21 +128,40 @@ class createProduct extends Component{
           </div>
 
           <div className="form-group">
-              <label htmlFor="CategoryIds">Select Categorys</label>
-              <section className="section-preview form-group">
-                  {this.state.Categorys.map(Category => (
-                    <div key={Category._id} className="custom-control custom-checkbox custom-control-inline">
-                        <input 
-                          type="checkbox" value={Category._id} onChange={this.handleCheckBoxChange}
-                          className="custom-control-input" id={Category._id} name="CategoryIds"
-                          checked = {this.state.data["CategoryIds"].includes(Category._id)}
-                        />
-                        <label className="custom-control-label" htmlFor={Category._id}>{Category.Name}</label>
-                    </div>
-                  ))}
-              </section>
+              <label htmlFor="ProdName">ProdName</label>
+              <input
+                value={this.state.data["ProdName"]}
+                onChange={this.handleChange}
+                name="ProdName"
+                id="ProdName"
+                type="text"
+                className="form-control"
+              />
+              {this.state.errors["ProdName"] && <div className="alert alert-danger">{this.state.errors["ProdName"]}</div>}
           </div>
-          <button disabled={this.validate()} className="btn btn-primary">Save</button>
+
+          <div className="form-group">
+              <label htmlFor="CategoryId">Select Category</label>
+              <select
+                value={this.state.data["CategoryId"]}
+                onChange={this.handleChange}
+                name="CategoryId"
+                id="CategoryId"
+                className="form-control"
+                  >
+                  <option value="" disabled defaultValue>
+                     Select Category
+                  </option>
+                  {this.state.Categorys.map(Category => (
+                    <option key={Category._id} value={Category._id}>
+                      {Category.CatName}
+                    </option>
+                  ))}
+              </select>
+              {this.state.errors["CategoryId"] && <div className="alert alert-danger">{this.state.errors["CategoryId"]}</div>}
+          </div>
+
+          <button disabled={this.validate()} className="btn btn-primary custom-btn">Save</button>
 
         </form>
       </div>

@@ -23,7 +23,7 @@ const Pagination = props => {
             key={pageNo}
             style={{ cursor: "pointer" }}
           >
-            <span className="page-link" onClick={() => onPageChange(pageNo)}>
+            <span className="custom-page-link page-link" onClick={() => onPageChange(pageNo)}>
               {pageNo}
             </span>
           </li>

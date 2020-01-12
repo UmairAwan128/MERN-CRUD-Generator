@@ -82,7 +82,7 @@ class LoginForm extends Component {
         <form onSubmit={this.handleSubmit}>
 
           <div className="form-group">
-              <label htmlFor="email">email</label>
+              <label htmlFor="email">Email</label>
               <input
                 value={this.state.data["email"]}
                 onChange={this.handleChange}
@@ -107,7 +107,7 @@ class LoginForm extends Component {
               {this.state.errors["password"] && <div className="alert alert-danger">{this.state.errors["password"]}</div>}
           </div>
 
-          <button disabled={this.validate()} className="btn btn-primary">Login</button>
+          <button disabled={this.validate()} className="btn btn-primary custom-btn">Login</button>
 
         </form>
       </div>

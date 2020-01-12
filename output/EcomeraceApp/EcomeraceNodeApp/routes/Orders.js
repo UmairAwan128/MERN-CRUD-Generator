@@ -26,10 +26,6 @@ router.get("/:id", verify, async (req, res) => {
         _id: order._id,
         OrderName: order.OrderName,
         OrderDate: order.OrderDate,
-        Comments: order.Comments,
-        Email: order.Email,
-        Password: order.Password,
-        Phone: order.Phone,
         UserId: order.User.Id,
         StatusId: order.Status.Id,
         ProductIds: productIds,
@@ -50,24 +46,20 @@ router.post("/", verify, async (req, res) => {
       products.push(
         {
           Id: product._id,
-          Name: product.Name
+          Name: product.ProdName
         }
       );
     }
     const order = new Order ({
         OrderName: req.body.OrderName,
         OrderDate: req.body.OrderDate,
-        Comments: req.body.Comments,
-        Email: req.body.Email,
-        Password: req.body.Password,
-        Phone: req.body.Phone,
         User: {
           Id: user._id,
-          name: user.name
+          Name: user.name
         },
         Status: {
           Id: status._id,
-          Name: status.Name
+          Name: status.StatName
         },
         Products: products,
     });
@@ -97,7 +89,7 @@ router.put("/:id", verify, async (req, res) => {
       products.push(
         {
           Id: product._id,
-          Name: product.Name
+          Name: product.ProdName
         }
       );
     }
@@ -107,17 +99,13 @@ router.put("/:id", verify, async (req, res) => {
         $set:{
              OrderName: req.body.OrderName,
              OrderDate: req.body.OrderDate,
-             Comments: req.body.Comments,
-             Email: req.body.Email,
-             Password: req.body.Password,
-             Phone: req.body.Phone,
              User: {
               Id: user._id,
-              name: user.name
+              Name: user.name
              },
              Status: {
               Id: status._id,
-              Name: status.Name
+              Name: status.StatName
              },
         Products: products,
 

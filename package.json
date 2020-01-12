@@ -1,22 +1,17 @@
 {
-  "name": "react-crud-generator-api",
+  "name": "react-crud-generator",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
+  "description": "A CLI that takes JSON scheema and helps in generating CRUD in React along with API in express and database in MongoDB",
+  "main": "src/index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "inquirer": "^6.4.1",
     "joi": "^14.3.1",
     "jsonschema": "^1.2.4",
     "rimraf": "^3.0.0",
-    "zip-a-folder": "0.0.9",
-    "zip-folder": "^1.0.0"
+    "zip-a-folder": "0.0.9"
   },
   "devDependencies": {
     "png-to-ico": "^2.0.5"

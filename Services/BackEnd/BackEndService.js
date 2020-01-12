@@ -35,23 +35,22 @@ class BackEndService {
     return instance;
   }
 
-  generateBackend(scheema, folderName) {
+  generateBackend(scheema, projectFolderPath) {
   
     try {
       let FilesGenerated = true;
       //....................CRUD Releated Folders................
       //create Project folder if not exist
-      let projectFolderPath = "./" + folderName;
       if (!fs.existsSync(projectFolderPath)) {
         fs.mkdirSync(projectFolderPath);
       }
       //create the models folder
-      let modelsFolderPath = "./" + folderName + "/models";
+      let modelsFolderPath = projectFolderPath + "/models";
       if (!fs.existsSync(modelsFolderPath)) {
         fs.mkdirSync(modelsFolderPath);
       }
       //create the routes folder
-      let routuesFolderPath = "./" + folderName + "/routes";
+      let routuesFolderPath = projectFolderPath + "/routes";
       if (!fs.existsSync(routuesFolderPath)) {
         fs.mkdirSync(routuesFolderPath);
       }
@@ -59,7 +58,7 @@ class BackEndService {
       //...........................................Other Folders..........................................
       
       //create the services folder
-      let serviceFolderPath = "./" + folderName + "/services";
+      let serviceFolderPath = projectFolderPath + "/services";
       if (!fs.existsSync(serviceFolderPath)) {
         fs.mkdirSync(serviceFolderPath);
       }

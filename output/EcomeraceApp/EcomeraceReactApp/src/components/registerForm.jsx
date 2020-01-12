@@ -89,7 +89,7 @@ class RegisterForm extends Component {
         <form onSubmit={this.handleSubmit}>
 
           <div className="form-group">
-              <label htmlFor="email">email</label>
+              <label htmlFor="email">Email</label>
               <input
                 value={this.state.data["email"]}
                 onChange={this.handleChange}
@@ -128,7 +128,7 @@ class RegisterForm extends Component {
               {this.state.errors["name"] && <div className="alert alert-danger">{this.state.errors["name"]}</div>}
           </div>
 
-          <button disabled={this.validate()} className="btn btn-primary">Register</button>
+          <button disabled={this.validate()} className="btn btn-primary custom-btn">Register</button>
 
         </form>
       </div>

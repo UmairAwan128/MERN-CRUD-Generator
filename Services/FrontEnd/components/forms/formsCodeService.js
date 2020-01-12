@@ -59,12 +59,12 @@ class formsCodeService {
       let tblRelations = scheema.relations;
       for (var index in tblRelations) {
 
-        if( tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" ){
+        if( tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany" ){
           code = code.concat(
             ' '+ tblRelations[index].tableName + 'Ids: [],'
           );
         }  
-        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"){
+        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "onetomany"){
           code = code.concat(
             ' '+ tblRelations[index].tableName + 'Id: "",'
           );  
@@ -116,13 +116,13 @@ class formsCodeService {
     if(scheema.hasOwnProperty('relations')){
       let tblRelations = scheema.relations;
       for (var index in tblRelations) {
-        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"){
+        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
           code = code.concat(
             '    ' + tblRelations[index].tableName + 'Ids:  Joi.array()\n'+ 
             '      .label("'+ tblRelations[index].tableName +'Ids"),\n'
           );
         }  
-        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"){
+        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "onetomany"){
           code = code.concat(
             '    ' + tblRelations[index].tableName + 'Id:  Joi.string()\n'+ 
             '      .required()\n'+
@@ -231,7 +231,7 @@ class formsCodeService {
               code += '  };\n\n';
               break;
             }
-            else if(tblRelations[index].type.toLowerCase() == "multiselect"){
+            else if(tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
               code += '  handleMultiSelectChange = event => {\n';
               code += '    const data = { ...this.state.data };\n';
               code += '    var options = event.target.options;\n';
@@ -289,7 +289,7 @@ class formsCodeService {
           let dataProperty;     
           for (var index in tblRelations) {
             dataProperty = tblRelations[index].dataProperty;
-            if(tblRelations[index].type.toLowerCase() == "select"){
+            if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "onetomany"){
                 code = code.concat(
                   '          <div className="form-group">\n' +
                   '              <label htmlFor="'+  tblRelations[index].tableName +'Id">' +
@@ -352,7 +352,7 @@ class formsCodeService {
                 '          </div>\n'
               );
             }
-            else if(tblRelations[index].type.toLowerCase() == "multiselect"){
+            else if(tblRelations[index].type.toLowerCase() == "multiselect"  || tblRelations[index].type.toLowerCase() == "manytomany"){
               code = code.concat(
                 '          <div className="form-group">\n' +
                 '              <label htmlFor="'+  tblRelations[index].tableName +'Ids">' +
@@ -379,7 +379,7 @@ class formsCodeService {
            
           }
         }
-        code += '          <button disabled={this.validate()} className="btn btn-primary">Save</button>\n\n';        
+        code += '          <button disabled={this.validate()} className="btn btn-primary custom-btn">Save</button>\n\n';        
         code +='        </form>\n';        
         code +='      </div>\n';        
         code +='    );\n';        

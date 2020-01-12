@@ -17,7 +17,7 @@ router.get("/:id", verify, async (req, res) => {
     const category = await Category.findById(req.params.id);
     res.json({
         _id: category._id,
-        Name: category.Name,
+        CatName: category.CatName,
         Type: category.Type,
         createdAt: category.createdAt
     });
@@ -29,7 +29,7 @@ router.get("/:id", verify, async (req, res) => {
 router.post("/", verify, async (req, res) => {
   try {
     const category = new Category ({
-        Name: req.body.Name,
+        CatName: req.body.CatName,
         Type: req.body.Type,
     });
     const savedCategory = await category.save();
@@ -54,7 +54,7 @@ router.put("/:id", verify, async (req, res) => {
       { _id: req.params.id },
       {
         $set:{
-             Name: req.body.Name,
+             CatName: req.body.CatName,
              Type: req.body.Type,
 
         }

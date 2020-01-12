@@ -5,15 +5,15 @@ import { saveCategory, getCategory } from "../services/categoryService";
 class createCategory extends Component{
 
   state = {
-    data: { Name: "", Type: "", },
+    data: { CatName: "", Type: "", },
     errors: {}
   };
 
   scheema = {
     _id: Joi.string(),
-    Name:  Joi.string()
+    CatName:  Joi.string()
       .required()
-      .label("Name"),
+      .label("CatName"),
     Type:  Joi.string()
       .allow('').allow(null)
       .label("Type"),
@@ -88,16 +88,16 @@ class createCategory extends Component{
         <form onSubmit={this.handleSubmit}>
 
           <div className="form-group">
-              <label htmlFor="Name">Name</label>
+              <label htmlFor="CatName">CatName</label>
               <input
-                value={this.state.data["Name"]}
+                value={this.state.data["CatName"]}
                 onChange={this.handleChange}
-                name="Name"
-                id="Name"
+                name="CatName"
+                id="CatName"
                 type="text"
                 className="form-control"
               />
-              {this.state.errors["Name"] && <div className="alert alert-danger">{this.state.errors["Name"]}</div>}
+              {this.state.errors["CatName"] && <div className="alert alert-danger">{this.state.errors["CatName"]}</div>}
           </div>
 
           <div className="form-group">
@@ -113,7 +113,7 @@ class createCategory extends Component{
               {this.state.errors["Type"] && <div className="alert alert-danger">{this.state.errors["Type"]}</div>}
           </div>
 
-          <button disabled={this.validate()} className="btn btn-primary">Save</button>
+          <button disabled={this.validate()} className="btn btn-primary custom-btn">Save</button>
 
         </form>
       </div>

@@ -39,7 +39,7 @@ class navbarCodeService {
     if(scheema.length == 0 ){
       code += '        {user && (\n';
       code += '          <li className="nav-item active">\n';
-      code += '            <NavLink className="nav-link" to="/sampleComponent">\n';
+      code += '            <NavLink className="nav-link custom-nav-link" to="/sampleComponent">\n';
       code += '              sampleComponent\n';
       code += '            </NavLink>\n';
       code += '          </li>\n';
@@ -50,7 +50,7 @@ class navbarCodeService {
         tblName = scheema[tableId].tableName; 
         code += '        {user && (\n';
         code += '          <li className="nav-item active">\n';
-        code += '            <NavLink className="nav-link" to="/'+ tblName.toLowerCase() +'s">\n';
+        code += '            <NavLink className="nav-link custom-nav-link" to="/'+ tblName.toLowerCase() +'s">\n';
         code += '              '+ tblName +'s\n';
         code += '            </NavLink>\n';
         code += '          </li>\n';

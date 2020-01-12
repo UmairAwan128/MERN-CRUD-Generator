@@ -130,7 +130,7 @@ class passwordResetForm extends Component {
               {this.state.errors["newPassword"] && <div className="alert alert-danger">{this.state.errors["newPassword"]}</div>}
           </div>
           
-          <button disabled={this.validate()} className="btn btn-primary">Update</button>
+          <button disabled={this.validate()} className="btn btn-primary custom-btn">Update</button>
         </form>
       </div>
     );

@@ -52,7 +52,7 @@ class modelsCodeService {
         dataProperty = tblRelations[index].dataProperty;
         fieldType = this.getMongoDBType(dataProperty.type);      
         
-        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" ){
+        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"  || tblRelations[index].type.toLowerCase() == "manytomany"){
           MongoDBScheema = MongoDBScheema.concat(
             "  " + tblRelations[index].tableName + "s: {\n" +
             "    type: [{\n" +            
@@ -60,7 +60,7 @@ class modelsCodeService {
             "        type: String,\n"+
             "        required: true\n"+
             "      },\n"+
-            "      " + dataProperty.name + ": {\n" +
+            "      Name: {\n" +
             "        type: " + fieldType + ",\n"+
             "        required: true\n"+
             "      }\n"+
@@ -69,14 +69,14 @@ class modelsCodeService {
             "  },\n"            
           );
         }
-        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"){
+        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "onetomany"){
           MongoDBScheema = MongoDBScheema.concat(
             "  " + tblRelations[index].tableName + ": {\n" +
             "    Id: {\n" +
             "      type: String,\n"+
             "      required: true\n"+
             "    },\n"+
-            "    " + dataProperty.name + ": {\n" +
+            "    Name: {\n" +
             "      type: " + fieldType + ",\n"+
             "      required: true\n"+
             "    }\n"+

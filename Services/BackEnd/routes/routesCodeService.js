@@ -65,7 +65,7 @@ class routesCodeService {
     if(scheema.hasOwnProperty('relations')){
       let tblRelations = scheema.relations;
       for (var index in tblRelations) {
-        if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect"){
+        if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
           route = route.concat(
             '    let '+tblRelations[index].tableName.toLowerCase()+'Ids = new Array();\n'+
             '    for(var i=0; i<' + tblName.toLowerCase() + '.'+tblRelations[index].tableName+'s.length; i++){\n'+ 
@@ -90,12 +90,12 @@ class routesCodeService {
     if(scheema.hasOwnProperty('relations')){
       let tblRelations = scheema.relations;
       for (var index in tblRelations) {
-        if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio"){
+        if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
           route = route.concat(
             "        " + tblRelations[index].tableName + "Id: " +tblName.toLowerCase()+"." +tblRelations[index].tableName+".Id,\n"
           ); 
         }
-        else if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect"){
+        else if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
           route = route.concat(
             "        " + tblRelations[index].tableName + "Ids: " +tblRelations[index].tableName.toLowerCase()+"Ids,\n" 
           );
@@ -128,7 +128,7 @@ class routesCodeService {
       tblRelations = scheema.relations;
       for (var index in tblRelations) {
         dataProperty = tblRelations[index].dataProperty;
-        if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect"){
+        if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
           route = route.concat(
             '    let '+tblRelations[index].tableName.toLowerCase()+'s = new Array();\n'+
             '    for(var i=0; i<req.body.'+tblRelations[index].tableName+'Ids.length; i++){\n'+ 
@@ -142,7 +142,7 @@ class routesCodeService {
             '    }\n' 
          );             
         }
-        else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio"){
+        else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
           route += '    const ' + tblRelations[index].tableName.toLowerCase() + ' = await '+ tblRelations[index].tableName +'.findById(req.body.'+ tblRelations[index].tableName +'Id);\n'; 
         }
       }
@@ -159,16 +159,16 @@ class routesCodeService {
       tblRelations = scheema.relations;
       for (var index in tblRelations) {
           dataProperty = tblRelations[index].dataProperty;
-          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"){
+          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
             route = route.concat(
               "        " + tblRelations[index].tableName + "s: "  + tblRelations[index].tableName.toLowerCase() + "s,\n"
               );
           }
-          else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio"){
+          else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
             route = route.concat(
             "        " + tblRelations[index].tableName + ": {\n" +
             "          Id: " +tblRelations[index].tableName.toLowerCase()+"._id,\n"+
-            "          "+dataProperty.name+": " +tblRelations[index].tableName.toLowerCase()+"."+dataProperty.name+"\n"+
+            "          Name: " +tblRelations[index].tableName.toLowerCase()+"."+dataProperty.name+"\n"+
             "        },\n"
             );
           }
@@ -213,7 +213,7 @@ class routesCodeService {
       tblRelations = scheema.relations;
       for (var index in tblRelations) {
         dataProperty = tblRelations[index].dataProperty;
-        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"){
+        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
           route = route.concat(
             '    let '+tblRelations[index].tableName.toLowerCase()+'s = new Array();\n'+
             '    for(var i=0; i<req.body.'+tblRelations[index].tableName+'Ids.length; i++){\n'+ 
@@ -227,7 +227,7 @@ class routesCodeService {
             '    }\n' 
          );             
         }
-        else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio"){
+        else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
           route += '    const ' + tblRelations[index].tableName.toLowerCase() + ' = await '+ tblRelations[index].tableName +'.findById(req.body.'+ tblRelations[index].tableName +'Id);\n'; 
         }
       }
@@ -248,16 +248,16 @@ class routesCodeService {
       tblRelations = scheema.relations;
       for (var index in tblRelations) {
           dataProperty = tblRelations[index].dataProperty;
-          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" ){
+          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
             route = route.concat(
               "        " + tblRelations[index].tableName + "s: "  + tblRelations[index].tableName.toLowerCase() + "s,\n"
               );
           }
-          else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio"){
+          else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
             route = route.concat(
               "             " + tblRelations[index].tableName + ": {\n" +
               "              Id: " +tblRelations[index].tableName.toLowerCase()+"._id,\n"+
-              "              "+dataProperty.name+": " +tblRelations[index].tableName.toLowerCase()+"."+dataProperty.name+"\n"+
+              "              Name: " +tblRelations[index].tableName.toLowerCase()+"."+dataProperty.name+"\n"+
               "             },\n"
             ); 
   

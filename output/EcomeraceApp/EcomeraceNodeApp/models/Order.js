@@ -9,28 +9,12 @@ const OrderScheema = mongoose.Schema({
     type: Date,
     required: true
   },
-  Comments: {
-    type: String,
-    required: false
-  },
-  Email: {
-    type: String,
-    required: false
-  },
-  Password: {
-    type: String,
-    required: false
-  },
-  Phone: {
-    type: Number,
-    required: true
-  },
   User: {
     Id: {
       type: String,
       required: true
     },
-    name: {
+    Name: {
       type: String,
       required: true
     }

@@ -17,7 +17,7 @@ router.get("/:id", verify, async (req, res) => {
     const status = await Status.findById(req.params.id);
     res.json({
         _id: status._id,
-        Name: status.Name,
+        StatName: status.StatName,
         createdAt: status.createdAt
     });
   } catch (ex) {
@@ -28,7 +28,7 @@ router.get("/:id", verify, async (req, res) => {
 router.post("/", verify, async (req, res) => {
   try {
     const status = new Status ({
-        Name: req.body.Name,
+        StatName: req.body.StatName,
     });
     const savedStatus = await status.save();
     res.status(200).json(savedStatus);
@@ -52,7 +52,7 @@ router.put("/:id", verify, async (req, res) => {
       { _id: req.params.id },
       {
         $set:{
-             Name: req.body.Name,
+             StatName: req.body.StatName,
 
         }
       }
