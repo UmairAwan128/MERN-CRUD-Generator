@@ -1,174 +1,157 @@
 {
-    "databaseName": "EcomeraceDb",
-    "applicationName": "Ecomerace",
-    "applicationTheme": "dark",
-    "crudSchema": [
-        {
-            "tableName": "Product",
-            "columns": [
-                {
-                    "label": "Price",
-                    "type": "number",
-                    "required": true
-                },
-                {
-                    "label": "Quantity",
-                    "type": "text",
-                    "required": false
-                },
-                {
-                    "label": "ProdName",
-                    "type": "text",
-                    "required": true
-                }
-            ],
-            "relations": [
-                {
-                    "tableName": "Category",
-                    "type": "oneToMany",
-                    "dataProperty": {
+    "appName": "Ecomerace",
+    "appTheme": "purplePlum",
+    "appDbName": "EcomeraceDb",
+    "appSchema": {
+        "tables": [
+            {
+                "name": "Product",
+                "columns": [
+                    {
+                        "name": "Price",
+                        "type": "number",
+                        "required": true
+                    },
+                    {
+                        "name": "Quantity",
+                        "type": "text",
+                        "required": false
+                    },
+                    {
+                        "name": "ProdName",
+                        "type": "text",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Category",
+                "columns": [
+                    {
                         "name": "CatName",
-                        "type": "text"
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "text",
+                        "required": false
                     }
-                }
-            ]
-        },
-        {
-            "tableName": "Category",
-            "columns": [
-                {
-                    "label": "CatName",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "label": "Type",
-                    "type": "text",
-                    "required": false
-                }
-            ]
-        },
-        {
-            "tableName": "Order",
-            "columns": [
-                {
-                    "label": "OrderName",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "label": "OrderDate",
-                    "type": "date",
-                    "required": true
-                }
-            ],
-            "relations": [
-                {
-                    "tableName": "User",
-                    "type": "select",
-                    "dataProperty": {
-                        "name": "name",
-                        "type": "text"
-                    }
-                },
-                {
-                    "tableName": "Status",
-                    "type": "radio",
-                    "dataProperty": {
-                        "name": "StatName",
-                        "type": "text"
-                    }
-                },
-                {
-                    "tableName": "Product",
-                    "type": "checkBox",
-                    "dataProperty": {
-                        "name": "ProdName",
-                        "type": "text"
-                    }
-                }
-            ]
-        },
-        {
-            "tableName": "Status",
-            "columns": [
-                {
-                    "label": "StatName",
-                    "type": "text",
-                    "required": true
-                }
-            ]
-        },
-        {
-            "tableName": "Customer",
-            "columns": [
-                {
-                    "label": "Name",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "label": "DOB",
-                    "type": "date",
-                    "required": true
-                },
-                {
-                    "label": "Email",
-                    "type": "email",
-                    "required": false
-                },
-                {
-                    "label": "Password",
-                    "type": "password",
-                    "required": false
-                },
-                {
-                    "label": "Phone",
-                    "type": "number",
-                    "required": true
-                }
-            ],
-            "relations": [
-                {
-                    "tableName": "Order",
-                    "type": "manyToMany",
-                    "dataProperty": {
+                ]
+            },
+            {
+                "name": "Order",
+                "columns": [
+                    {
                         "name": "OrderName",
-                        "type": "text"
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "OrderDate",
+                        "type": "date",
+                        "required": true
                     }
-                }
-            ]
-        },
-        {
-            "tableName": "Suplier",
-            "columns": [
-                {
-                    "label": "Name",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "label": "Email",
-                    "type": "email",
-                    "required": false
-                },
-                {
-                    "label": "Phone",
-                    "type": "number",
-                    "required": true
-                }
-            ],
-            "relations": [
-                {
-                    "tableName": "Product",
-                    "type": "multiselect",
-                    "dataProperty": {
-                        "name": "ProdName",
-                        "type": "text"
+                ]
+            },
+            {
+                "name": "Status",
+                "columns": [
+                    {
+                        "name": "StatName",
+                        "type": "text",
+                        "required": true
                     }
-                }
-            ]
-        }
-
-    ]
+                ]
+            },
+            {
+                "name": "Customer",
+                "columns": [
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "DOB",
+                        "type": "date",
+                        "required": true
+                    },
+                    {
+                        "name": "Email",
+                        "type": "email",
+                        "required": false
+                    },
+                    {
+                        "name": "Password",
+                        "type": "password",
+                        "required": false
+                    },
+                    {
+                        "name": "Phone",
+                        "type": "number",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Suplier",
+                "columns": [
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Email",
+                        "type": "email",
+                        "required": false
+                    },
+                    {
+                        "name": "Phone",
+                        "type": "number",
+                        "required": true
+                    }
+                ]
+            }
+        ],
+        "relations": [
+            {
+                "firstTable": "Product",
+                "secondTable": "Category",
+                "relationType": "oneToMany",
+                "secondTableColumn": "CatName"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "User",
+                "relationType": "select",
+                "secondTableColumn": "email"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "Status",
+                "relationType": "radio",
+                "secondTableColumn": "StatName"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "Product",
+                "relationType": "checkBox",
+                "secondTableColumn": "ProdName"
+            },
+            {
+                "firstTable": "Customer",
+                "secondTable": "Order",
+                "relationType": "manyToMany",
+                "secondTableColumn": "OrderName"
+            },
+            {
+                "firstTable": "Suplier",
+                "secondTable": "Product",
+                "relationType": "multiselect",
+                "secondTableColumn": "ProdName"
+            }
+        ]
+    }
 }
