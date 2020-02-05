@@ -17,10 +17,10 @@ class detailsService {
     return instance;
   }
 
-  generateDetailsCRUDFile(scheema, folderPath) {
-    let fileName = scheema.tableName.toLowerCase() + "Details.jsx";
+  generateDetailsCRUDFile(schemaTable,schemaRelations, folderPath) {
+    let fileName = schemaTable.name.toLowerCase() + "Details.jsx";
     try {
-      let detailsCode = detailsCodeServiceInst.GenerateDetailsFileCode(scheema); //generate code
+      let detailsCode = detailsCodeServiceInst.GenerateDetailsFileCode(schemaTable,schemaRelations); //generate code
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, detailsCode, err => {
         if (err) {

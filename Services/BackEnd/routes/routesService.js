@@ -17,17 +17,15 @@ class routesService {
     return instance;
   }
 
-  generateRouteFile(scheema, folderPath) {
+  generateRouteFile(schemaTable,schemaRelations, folderPath) {
     try {
-      let fileName = scheema.tableName+"s"+".js";
-      let Code = routesCodeServiceInst.GetRouteModelCode(scheema); //generate table code
+      let fileName = schemaTable.name+"s"+".js";
+      let Code = routesCodeServiceInst.GetRouteModelCode(schemaTable,schemaRelations); 
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, Code, err => {
         if (err) {
           console.log(err);
-        } else {
-          //console.log("Sccessfully created " + fileName + " file");
-        }
+        } 
       });
       return true;
     } catch (e) {

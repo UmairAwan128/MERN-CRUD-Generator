@@ -24,55 +24,60 @@ class CRUDGeneratorService {
   
     generateCRUD(scheema, outputFolderLoc) {//C:\Work\UNIRelated\FYP\pack\CRUD_Generator_React
         
-        const crudScheema = scheema["crudSchema"] ? scheema["crudSchema"] : ""; //get crudScheema
-        const databaseName = scheema["databaseName"] ? scheema["databaseName"] : "";
-        const applicationName = scheema["applicationName"] ? scheema["applicationName"] : "";
-        const applicationTheme = scheema["applicationTheme"] ? scheema["applicationTheme"] : "";
-        
-        //const tblName = scheema[0].tableName;
-        //const tblColumns = scheema[0].columns;
-        //this.showScheema(crudScheema);
-         
-        let outputFolderName = "output";
-        let projectFolderName, ReactProjectFolderName, NodeProjectFolderName, projectDatabaseName;
+      const appScheema = scheema["appSchema"] ? scheema["appSchema"] : ""; //get appScheema
+      const databaseName = scheema["appDbName"] ? scheema["appDbName"] : "";
+      const applicationName = scheema["appName"] ? scheema["appName"] : "";
+      const applicationTheme = scheema["appTheme"] ? scheema["appTheme"] : "";
+     
+      //const tblName = scheema[0].tableName;
+      //const tblColumns = scheema[0].columns;
+      //this.showScheema(appScheema);
+       
+      let outputFolderName = "AppGenerated"; 
+      let projectFolderName, ReactProjectFolderName, NodeProjectFolderName, projectDatabaseName;
 
-        if(applicationName){ //if user passed name for its application  
-          projectFolderName = applicationName + "App";
-          ReactProjectFolderName = applicationName + "ReactApp";
-          NodeProjectFolderName = applicationName + "NodeApp";
+      if(applicationName){ //if user passed name for its application  
+        projectFolderName = applicationName; //+ "App";
+        ReactProjectFolderName = applicationName + "ReactApp";
+        NodeProjectFolderName = applicationName + "NodeApp";
 
-          //also setting values to crudConfig so it will be accessible accross the application
-          CRUDConfigurations.ProjectFolderName = projectFolderName;
-          CRUDConfigurations.ReactProjectFolderName = ReactProjectFolderName;
-          CRUDConfigurations.NodeProjectFolderName = NodeProjectFolderName;  
-        }
-        else{ //use default or preset names
-          projectFolderName = CRUDConfigurations.DefaultProjectFolderName;
-          ReactProjectFolderName = CRUDConfigurations.DefaultReactProjectFolderName;
-          NodeProjectFolderName = CRUDConfigurations.DefaultNodeProjectFolderName;  
+        //also setting values to crudConfig so it will be accessible accross the application
+        CRUDConfigurations.ProjectFolderName = projectFolderName;
+        CRUDConfigurations.ReactProjectFolderName = ReactProjectFolderName;
+        CRUDConfigurations.NodeProjectFolderName = NodeProjectFolderName;  
+      }
+      else{ //use default or preset names
+        projectFolderName = CRUDConfigurations.DefaultProjectFolderName;
+        ReactProjectFolderName = CRUDConfigurations.DefaultReactProjectFolderName;
+        NodeProjectFolderName = CRUDConfigurations.DefaultNodeProjectFolderName;  
+        //and set them to crudConfig so it will be accessible accross the application
+        CRUDConfigurations.ProjectFolderName = CRUDConfigurations.DefaultProjectFolderName;
+        CRUDConfigurations.ReactProjectFolderName = CRUDConfigurations.DefaultReactProjectFolderName;
+        CRUDConfigurations.NodeProjectFolderName = CRUDConfigurations.DefaultNodeProjectFolderName; 
+      }
 
-          CRUDConfigurations.ProjectFolderName = CRUDConfigurations.DefaultProjectFolderName;
-          CRUDConfigurations.ReactProjectFolderName = CRUDConfigurations.DefaultReactProjectFolderName;
-          CRUDConfigurations.NodeProjectFolderName = CRUDConfigurations.DefaultNodeProjectFolderName; 
-        }
+      if(databaseName){ //if user passed name for its project database  
+        projectDatabaseName = databaseName + "DB";
+        //also setting values to crudConfig so it will be accessible accross the application
+        CRUDConfigurations.ProjectDatabaseName = projectDatabaseName; 
+      }
+      else if(applicationName){//if user passed name for its project only so use that as DBName 
+        projectDatabaseName = applicationName + "DB";
+        //also setting values to crudConfig so it will be accessible accross the application
+        CRUDConfigurations.ProjectDatabaseName = projectDatabaseName; 
+      }
+      else{ //not passed any so use default or preset names
+        projectDatabaseName = CRUDConfigurations.DefaultProjectDatabaseName;
+        CRUDConfigurations.ProjectDatabaseName = CRUDConfigurations.DefaultProjectDatabaseName; 
+      }
 
-        if(databaseName){ //if user passed name for its project database  
-          projectDatabaseName = databaseName + "DB";
-          //also setting values to crudConfig so it will be accessible accross the application
-          CRUDConfigurations.ProjectDatabaseName = projectDatabaseName; 
-        }
-        else{ //use default or preset names
-          projectDatabaseName = CRUDConfigurations.DefaultProjectDatabaseName;
-          CRUDConfigurations.ProjectDatabaseName = CRUDConfigurations.DefaultProjectDatabaseName; 
-        }
-
-        if(applicationTheme){ //if user passed name for its project theme 
-          //also setting values to crudConfig so it will be accessible accross the application
-          CRUDConfigurations.ProjectThemeName = applicationTheme; 
-        }
-        else{ //use default or preset names
-          CRUDConfigurations.ProjectThemeName = CRUDConfigurations.DefaultProjectThemeName; 
-        }
+      if(applicationTheme){ //if user passed name for its project theme 
+        //also setting values to crudConfig so it will be accessible accross the application
+        CRUDConfigurations.ProjectThemeName = applicationTheme; 
+      }
+      else{ //use default or preset theme
+        CRUDConfigurations.ProjectThemeName = CRUDConfigurations.DefaultProjectThemeName; 
+      }
 
         let outputFolderPath = outputFolderLoc +"/" + outputFolderName ;
         if (!fs.existsSync(outputFolderPath)) {
@@ -84,49 +89,71 @@ class CRUDGeneratorService {
         }
         const ReactProjectFolderCompName =  projectFolderPath +"/"+ ReactProjectFolderName;
         const NodeProjectFolderCompName =  projectFolderPath +"/"+ NodeProjectFolderName;
-        
+          
         try {
-            let isCodeGenerated = backEndGenerateServiceObj.generateBackend(
-              crudScheema,  
-              NodeProjectFolderCompName
-            );
-            
-            isCodeGenerated = frontEndGenerateServiceObj.generateFrontEnd(
-              crudScheema,
-              ReactProjectFolderCompName
-            );
-            
-            return isCodeGenerated;
-        } 
-        catch (e) {
-            console.log(e);
-            return false;
-        }
+          let isCodeGenerated = backEndGenerateServiceObj.generateBackend(
+            appScheema,  
+            NodeProjectFolderCompName
+          );
+          
+          isCodeGenerated = frontEndGenerateServiceObj.generateFrontEnd(
+            appScheema,
+            ReactProjectFolderCompName
+          );
+          
+          return isCodeGenerated;
+      } 
+      catch (e) {
+          console.log(e);
+          return false;
+      }
     }
 
     showScheema(scheema) {
-      for (var objectId in scheema) {
-        var tableName = scheema[objectId].tableName; 
-        var tableColumns = scheema[objectId].columns; 
+      var schemaTables = scheema.tables; 
+      var schemaRelations = scheema.relations; 
+
+      for (var tableId in schemaTables) {
+        var tableName = schemaTables[tableId].name; 
+        var tableColumns = schemaTables[tableId].columns; 
         console.log(tableName);
         for (var column in tableColumns) {
           console.log(
             "key:" +
               column +
-              ", label:" +
-              tableColumns[column]["label"] +
+              ", name:" +
+              tableColumns[column].name +
               ", type:" +
-              tableColumns[column].type
+              tableColumns[column].type +
+              ", required:" +
+              tableColumns[column].required
           );
         }
+      }
+      console.log("\n relations:______ \n");
+      for (var relId in schemaRelations) {
+        var firstTable = schemaRelations[relId].firstTable; 
+        var secondTable = schemaRelations[relId].secondTable; 
+        var relationType = schemaRelations[relId].relationType; 
+        var secondTableColumn = schemaRelations[relId].secondTableColumn; 
+        console.log(
+            firstTable +
+            " -- " +
+            relationType +
+           " --> "+
+            secondTable +
+            " ( " +
+            secondTableColumn +
+            " ) "
+        );
       }
     }
 
 
     validateScheema(scheema) {
       var validator = new Validator();
-      var dataPropScheema = {
-        "id": "/dataPropScheema",
+      var columnsScheema = {
+        "id": "/tblColumn",
         "type": "object",
         "properties": {
           "name": {"type": "string"},
@@ -134,46 +161,16 @@ class CRUDGeneratorService {
             "enum": [
               "text","number","email","password","date"
             ]
-          }
-        },
-        "required": ["name","type"]
-      };
-      var columnsScheema = {
-        "id": "/tblColumn",
-        "type": "object",
-        "properties": {
-          "label": {"type": "string"},
-          "type": { 
-            "enum": [
-              "text","number","email","password","date"
-            ]
           },
           "required": {"type": "boolean"}
         },
-        "required": ["label","type"]
-      };    
-      var relationsScheema = {
-        "id": "/tblRelation",
-        "type": "object",
-        "properties": {
-          "tableName": {
-              "type": "string",
-              "pattern": "^[A-Z][a-zA-Z]*$"
-            },
-          "type": {
-            "enum": [
-              "select", "radio", "checkBox","multiselect","oneToMany","manyToMany"
-            ]
-          },
-          "dataProperty": {"$ref": "/dataPropScheema"}
-        },
-        "required": ["tableName","type","dataProperty"]
-      };    
+        "required": ["name","type"]
+      };  
       var tblSchema = {
         "id": "/tblScheema",
         "type": "object",
         "properties": {
-          "tableName": {
+          "name": {
               "type": "string",
               "pattern": "^[A-Z][a-zA-Z]*$"
           },
@@ -181,40 +178,72 @@ class CRUDGeneratorService {
             "type": "array",
             "items": {"$ref": "/tblColumn"},
             "uniqueItems": true
+          }
+        },
+        "required": ["name","columns"]
+      };    
+      var relationsSchema = {
+        "id": "/tblRelation",
+        "type": "object",
+        "properties": {
+          "firstTable": {
+              "type": "string",
+              "pattern": "^[A-Z][a-zA-Z]*$"
+          },
+          "secondTable": {
+              "type": "string",
+              "pattern": "^[A-Z][a-zA-Z]*$"
+          },
+          "relationType": {
+            "enum": [
+              "select", "radio", "checkBox","multiselect","oneToMany","manyToMany"
+            ]
+          },
+          "secondTableColumn": {"type": "string"}
+        },
+        "required": ["firstTable","secondTable","relationType","secondTableColumn"]
+      };
+          
+      var appSchema = {
+        "id": "/appSchema",
+        "type": "object",
+        "properties": {
+          "tables": {
+            "type": "array",
+            "items": {"$ref": "/tblScheema"},
+            "uniqueItems": true
           },
           "relations": {
             "type": "array",
             "items": {"$ref": "/tblRelation"},
             "uniqueItems": true
-          },
+          }
         },
-        "required": ["tableName","columns"]
+        "required": ["tables"]
       };
 
       var crudGenSchema = {
         "id": "/crudGenSchema",
         "type": "object",
         "properties": {
-          "databaseName": {
+          "appName": {
               "type": "string"
           },
-          "applicationName": {
-            "type": "string"
-          },
-          "applicationTheme": {
+          "appTheme": {
             "enum": [
-              "dark", "defaultLight", "electricBlue","purplePlum"
+              "dark", "defaultLight", "electricBlue"
             ]
           },
-          "crudSchema": {
-            "type": "array",
-            "items": {"$ref": "/tblScheema"},
-            "uniqueItems": true
+          "appDbName": {
+            "type": "string"
+          },
+          "appSchema": {
+            "$ref": "/appSchema"
           }
         },
-        "required": ["crudSchema"]
+        "required": ["appSchema"]
       };
-      // //can be used as dummy crudScheema to test this method
+      // //can be used as dummy appScheema to test this method
       // var testScheema = [
       //   {
       //     "tableName":"Product",
@@ -230,104 +259,101 @@ class CRUDGeneratorService {
       //   }
       // ];
 
-      validator.addSchema(dataPropScheema, '/dataPropScheema');
       validator.addSchema(columnsScheema, '/tblColumn');
-      validator.addSchema(relationsScheema, '/tblRelation');
       validator.addSchema(tblSchema, '/tblScheema');
+      validator.addSchema(relationsSchema, '/tblRelation');
+      validator.addSchema(appSchema, '/appSchema');
       let errors = validator.validate(scheema, crudGenSchema);
       if(errors != "" ){
         return errors; 
       }
-      else{ //check if the user has made the correct relations b/w tables
-        var crudSchema = scheema["crudSchema"];   
-        for (var objectId in crudSchema) {   // in case of relation there are two tables first table makes relation with second so
-          //var tableColumns = crudSchema[objectId].columns; 
-          var tableRelations = crudSchema[objectId].relations; //took the first table relations object
-          //var tableColumnType = "", error = ""; 
-          var tableName = crudSchema[objectId].tableName; 
+      else{ //check for other validations
+        var schemaTables = scheema["appSchema"].tables;
+        var schemaRelations = scheema["appSchema"].relations;
           
-          if( tableName.toLowerCase() == "user"){
-              errors += '0: "'+ tableName +'" is not a valid tableName as this will be generated automatically, please use something else.';
+        for(var tableId in schemaTables){ //makesure user cannot create a table with name "user".
+            var tableName = schemaTables[tableId].name; 
+            if( tableName.toLowerCase() == "user"){
+                errors += '0: "'+ tableName +'" is not a valid tableName as this will be generated automatically, please use something else.';
+                return errors;   
+            }    
+        }
+        
+        //check if user has made relations b/w the tables that exist in Scheema
+        for (var relationId in schemaRelations) { // in case of relation there are two tables first table makes relation with second table column
+           
+            var firstTable = schemaRelations[relationId].firstTable;
+            var secondTable = schemaRelations[relationId].secondTable;
+            var secondTableColumn = schemaRelations[relationId].secondTableColumn;
+            var firstTableFound=false, secondTableFound=false, secondTableColumnFound=false;
+
+            if( firstTable == secondTable){ //if user try to make a table relation with itself
+              errors += "0: A table cannot have relation with it self please use different table names on instance[appSchema].relations["+relationId+"].";
+              return errors;
+            }
+            
+            if( firstTable.toLowerCase() == "user"){ //user table cannot make relation with anyother table
+              errors += '0: "'+ firstTable +'" table cannot be used as firstTable or cannot make relation with other tables, please use any other table.';
               return errors;   
-          }
-          
-          for (var relationId in tableRelations) { //access each relation 
-
-            var relationTblName = tableRelations[relationId].tableName; 
-            var dataProperty = tableRelations[relationId].dataProperty; // releation table ref name,type fields
-            let scheemaFound = false;
-
-            for (var innerObjectId in crudSchema) { //traverse through all the tables
-
-              var InnerTableName = crudSchema[innerObjectId].tableName; //and get table name
-              var InnerTableColumns = crudSchema[innerObjectId].columns;  //columns
-
-              if( relationTblName == InnerTableName && innerObjectId == objectId){ //if user try to make a table relation with itself
-                errors += "0: A table cannot have relation with it self please use other tableName on instance["+objectId+"].relations["+relationId+"].";
-                return errors;
+            }    
+  
+            for(var tableId in schemaTables){
+              
+              var tableName = schemaTables[tableId].name; 
+              
+              if(tableName == firstTable){
+                  firstTableFound = true; 
               }
 
-              if( relationTblName == InnerTableName ){ // if table exist i.e we can make realtion
+              if(tableName == secondTable){
+                  secondTableFound = true;
+                  var tableColumns = schemaTables[tableId].columns;  //get table columns
 
-                for (var columnId in InnerTableColumns) { //then iterate through its columns and look for if the dataProperty.name matches
-                  var innerTableColumnLabel = InnerTableColumns[columnId].label; // and label of each
-
-                  if(innerTableColumnLabel == dataProperty.name){ //matched so found
-                    scheemaFound = true;
-                    break;   
+                  for (var columnId in tableColumns) { //then iterate through its columns
+                    var columnName = tableColumns[columnId].name; // and get the name of each column
+                    if(columnName == secondTableColumn){ //check if it matches with any second table columnName
+                      secondTableColumnFound = true;
+                    }
                   }
-                }
-                if(!scheemaFound){ //so scheema not found
-                    errors += "0: invalid column name used on dataProperty of instance.crudSchema["+objectId+"].relations["+relationId+"], please specify name of column that exist in "+relationTblName+" scheema.";
-                    return errors;
-                }
-               
-                scheemaFound = false; //set it false so we can reuse it to check for dataProperty.type
 
-                for (var columnId in InnerTableColumns) { //then iterate through its columns and look for if the dataProperty.type matches
-                  var innerTableColumnLabel = InnerTableColumns[columnId].label; // and label of each
-                  var innerTableColumnType = InnerTableColumns[columnId].type; //get type 
-                  if(innerTableColumnLabel == dataProperty.name && innerTableColumnType == dataProperty.type){ //match for both name and type as both should belong to same instance
-                    scheemaFound = true;
-                    break;   
+                  if(!secondTableColumnFound){ //so column name is invalid
+                      errors += "0: invalid column name used in secondTableColumn on instance[appSchema].relations["+relationId+"], please specify name of column that exist in "+secondTable+" scheema.";
+                      return errors;
                   }
-                  
-                }
-                if(!scheemaFound){ //so scheema not found
-                  errors += "0: invalid column type used on dataProperty of instance.crudSchema["+objectId+"].relations["+relationId+"], please specify type coresponding to column "+ dataProperty.name+ " you specified from the "+relationTblName+" scheema. ";
-                  return errors;
-                }
-                break;
+
               }
 
-              else if(relationTblName.toLowerCase() == "user"){
+              if(secondTable.toLowerCase() == "user"){ //if other table try making realtion with user table
+                secondTableFound = true;
                 if( 
                     !(
-                      dataProperty.name == "name" || dataProperty.name == "email" ||
-                      dataProperty.name == "password"
+                      secondTableColumn == "name" || secondTableColumn == "email" ||
+                      secondTableColumn == "password"
                     )
                 ){
-                  errors += "0: invalid column name : "+dataProperty.name+" is used on instance.crudSchema["+objectId+"].relations["+relationId+"], "+relationTblName+" table only has name,email,password fields so use any of these.";
+                  errors += "0: invalid column name used in secondTableColumn on instance[appSchema].relations["+relationId+"], "+secondTableColumn+" table only has name,email,password fields so use any of these.";
                   return errors;
                 }
-
-                else if(dataProperty.type != "text"){
-                  errors += "0: invalid column type: "+dataProperty.type+" is used on instance.crudSchema["+objectId+"].relations["+relationId+"], please use the type text.";
-                  return errors;  
-                }
-
-                scheemaFound = true;
-                break;   
+                secondTableColumnFound = true;            
               }
-              
-            } 
-          
-            if(!scheemaFound){
-              errors += "0: invalid tableName : "+relationTblName+" is used on instance.crudSchema["+objectId+"].relations["+relationId+"], please use name of the table that exists.";
+
+            }//end of tables for  
+        
+            if(!firstTableFound){ // firstTable not found
+              errors += "0: invalid table name used on firstTable of instance[appSchema].relations["+relationId+"], please specify name of table that you provided in scheema.";
+              return errors;
+            }
+            if(!secondTableFound){ // secondTable not found
+              errors += "0: invalid table name used on secondTable of instance[appSchema].relations["+relationId+"], please specify name of table that you provided in scheema.";
+              return errors;
+            }
+            if(!secondTableColumnFound){ // secondTable column not found
+              errors += "0: invalid column name used on secondTableColumn of instance[appSchema].relations["+relationId+"], please specify name of column that exist in "+secondTable+".";
               return errors;
             }
 
-          }  
+        } //end of relations for
+
           
           //check if the valid/supported types are used for the columns(commented) because using builtin json scheema option 
           // for (var columnId in tableColumns) {
@@ -357,15 +383,12 @@ class CRUDGeneratorService {
           //     return error;  
           //   }
           // }         
-        }
         return "";            
       }
     }
 }
 
 module.exports = CRUDGeneratorService;
-
-
 
 
 

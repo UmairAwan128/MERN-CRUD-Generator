@@ -17,16 +17,14 @@ class tableService {
     return instance;
   }
 
-  generateTblCRUDFile(scheema, folderPath) {
-    let fileName = scheema.tableName.toLowerCase() + "s.jsx";
+  generateTblCRUDFile(schemaTable,schemaRelations,folderPath) {
+    let fileName = schemaTable.name.toLowerCase() + "s.jsx";
     try {
-      let tableCode = tblCodeServiceInst.GenerateTableCode(scheema); //generate table code
+      let tableCode = tblCodeServiceInst.GenerateTableCode(schemaTable,schemaRelations); //generate table code
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, tableCode, err => {
         if (err) {
           console.log(err);
-        } else {
-          //console.log("Sccessfully created " + fileName + " file");
         }
       });
       return true;

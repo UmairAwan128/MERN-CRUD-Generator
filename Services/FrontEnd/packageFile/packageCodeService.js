@@ -19,7 +19,7 @@ class packageFileCodeService {
     let remainingCode = fs.readFileSync(path.resolve(filePath), "utf8");    
     let code = "";
     code = code.concat(
-      '{'+
+      '{\n'+
       ' "name": "'+CRUDConfigurations.ReactProjectFolderName+'",'+
       '\n'+
       remainingCode  

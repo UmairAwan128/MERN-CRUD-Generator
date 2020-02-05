@@ -3,6 +3,7 @@
 # dependencies
 node_modules/
 jspm_packages/
+output/
 
 # production
 /build

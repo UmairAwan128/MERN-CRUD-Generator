@@ -10,64 +10,75 @@ class detailsCodeService {
     return instance;
   }
 
-  GenerateDetailsFileCode(scheema) {
-    let tblName = scheema.tableName;
-    var formCode = this.getImports(scheema); //imports
-    formCode += this.generateClassAndState(scheema);
-    formCode += this.generatePopulateFormMethod(scheema);
-    formCode += this.generateComponentDidMount(scheema); 
-    formCode += this.generateSubmitMethod(scheema); 
-    formCode += this.generateRenderMethod(scheema);
+  GenerateDetailsFileCode(schemaTable,schemaRelations) {
+    let tblName = schemaTable.name;
+    var formCode = this.getImports(schemaTable,schemaRelations); //imports
+    formCode += this.generateClassAndState(schemaTable,schemaRelations);
+    formCode += this.generatePopulateFormMethod(schemaTable,schemaRelations);
+    formCode += this.generateComponentDidMount(tblName,schemaRelations); 
+    formCode += this.generateSubmitMethod(tblName); 
+    formCode += this.generateRenderMethod(schemaTable,schemaRelations);
     formCode += this.generateCloseAndExport(tblName); 
     return formCode;
   }
 
-  getImports(scheema) {
-    let tblName = scheema.tableName;
-    var code = 'import React, { Component } from "react";';
-    code = code.concat('import { get'+ tblName +' } from "../services/'+ tblName.toLowerCase() +'Service";\n');
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        code += 'import { get' + tblRelations[index].tableName + 's } from "../services/'+ tblRelations[index].tableName.toLowerCase() +'Service";\n'; 
+  getImports(schemaTable,schemaRelations) {
+    let tblName = schemaTable.name;
+    let firstTable,secondTable;
+    var code = 'import React, { Component } from "react";\n';
+    code = code.concat('import { get'+ tblName +' } from "../../services/'+ tblName.toLowerCase() +'Service";\n');
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          code += 'import { get' + secondTable + 's } from "../../services/'+ secondTable.toLowerCase() +'Service";\n'; 
+        }
       }
     }
     code += '\n';
     return code;
   }
 
-  generateClassAndState(scheema){
-    let tblName = scheema.tableName;
-    let tblColumns = scheema.columns;
+  generateClassAndState(schemaTable,schemaRelations){
+    let tblName = schemaTable.name;
+    let tblColumns = schemaTable.columns;
+    let firstTable,secondTable,relationType;
     let code = 'class '+ tblName +'Details extends Component{\n\n';
     code += '  state = {\n';
     code += '    data: {'
     for (var column in tblColumns) {
       code = code.concat(
-          ' '+ tblColumns[column].label + ': "",'
+          ' '+ tblColumns[column].name + ': "",'
       );
     }
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-
-        if( tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
-          code = code.concat(
-            ' '+ tblRelations[index].tableName + 'Ids: [],'
-          );
-        }  
-        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "onetomany"){
-          code = code.concat(
-            ' '+ tblRelations[index].tableName + 'Id: "",'
-          );  
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          if( relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
+            code = code.concat(
+              ' '+ secondTable + 'Ids: [],'
+            );
+          }  
+          else if(relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "select" || relationType.toLowerCase() == "onetomany"){
+            code = code.concat(
+              ' '+ secondTable + 'Id: "",'
+            );  
+          }
         }
       }
     }
     code += ' },\n';
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        code += '    ' + tblRelations[index].tableName + 's: [],\n'; 
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          code += '    ' + secondTable + 's: [],\n'; 
+        }
       }
     }
     code += '    errors: {}\n';
@@ -75,8 +86,9 @@ class detailsCodeService {
     return code;
   }
 
-  generatePopulateFormMethod(scheema){
-    let tblName = scheema.tableName;
+  generatePopulateFormMethod(schemaTable,schemaRelations){
+    let tblName = schemaTable.name;
+    let firstTable,secondTable;
     let code = '  async populateForm() {\n';
     code += '    try {\n';
     code += '        const '+ tblName.toLowerCase() +'Id = this.props.match.params.id;\n';
@@ -89,42 +101,51 @@ class detailsCodeService {
     code += '      }\n';
     code += '    }\n';
     code += '  }\n\n';
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        code += '  async populate'+ tblRelations[index].tableName +'s() {\n';
-        code += '    const { data: '+ tblRelations[index].tableName +'s } = await get'+ tblRelations[index].tableName +'s();\n';
-        code += '    this.setState({ '+ tblRelations[index].tableName +'s: '+ tblRelations[index].tableName +'s });\n';
-        code += '  }\n\n';
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          code += '  async populate'+ secondTable +'s() {\n';
+          code += '    const { data: '+ secondTable +'s } = await get'+ secondTable +'s();\n';
+          code += '    this.setState({ '+ secondTable +'s: '+ secondTable +'s });\n';
+          code += '  }\n\n';
+        }
       }
     }
     return code;
   }
 
-  generateComponentDidMount(scheema) {
+  generateComponentDidMount(tblName,schemaRelations) {
+    let firstTable,secondTable;
     let code = '  async componentDidMount() {\n';
         code += '    await this.populateForm();\n';
-        if(scheema.hasOwnProperty('relations')){
-          let tblRelations = scheema.relations;
-          for (var index in tblRelations) {
-            code += '    await this.populate'+tblRelations[index].tableName+'s();\n';
+        if(schemaRelations != null){
+          for (var index in schemaRelations) {
+            firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+            if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+              secondTable = schemaRelations[index].secondTable; 
+              code += '    await this.populate'+secondTable+'s();\n';
+            }
           }
         }
         code += '  }\n\n'; 
     return code;
   }
 
-  generateSubmitMethod(scheema) {
+  generateSubmitMethod(tblName) {
     let code = '  handleSubmit = async (event) => {\n';
         code += '    event.preventDefault();\n';
-        code += '    this.props.history.push("/'+scheema.tableName.toLowerCase()+'s");\n';
+        code += '    this.props.history.push("/'+tblName.toLowerCase()+'s");\n';
         code += '  };\n\n';  
     return code;
   }
   
-  generateRenderMethod(scheema) {
-    let tblName = scheema.tableName;
-    let tblColumns = scheema.columns;
+  generateRenderMethod(schemaTable,schemaRelations) {
+    let tblName = schemaTable.name;
+    let tblColumns = schemaTable.columns;
+    let firstTable,secondTable,relationType,secondTableColumn;
+
     let code = '  render() {\n';
         code += '    return (\n';
         code += '      <div className="content">\n';
@@ -134,44 +155,47 @@ class detailsCodeService {
         for (var column in tblColumns) {
           code = code.concat(
               '          <div className="form-group">\n' +
-              '              <label  className="form-control"> '+ tblColumns[column].label+ ' : '
+              '              <label  className="form-control"> '+ tblColumns[column].name+ ' : \n'
               );
           if(tblColumns[column].type.toLowerCase() === "date"){
-            code = code.concat('                {this.state.data["'+ tblColumns[column].label +'"].substring(0, 10)}\n');
+            code = code.concat('                 {this.state.data["'+ tblColumns[column].name +'"].substring(0, 10)}\n');
           }
           else{
-            code = code.concat('                {this.state.data["'+ tblColumns[column].label +'"]}\n');            
+            code = code.concat('                 {this.state.data["'+ tblColumns[column].name +'"]}\n');            
           }
           code = code.concat('              </label>\n');
           code = code.concat('          </div>\n');                                    
         }
 
-        if(scheema.hasOwnProperty('relations')){
-          let tblRelations = scheema.relations;
-          let dataProperty;     
-          for (var index in tblRelations) {
-            dataProperty = tblRelations[index].dataProperty;
-            if(tblRelations[index].type.toLowerCase() == "select" || scheema.hasOwnProperty('onetomany') || tblRelations[index].type.toLowerCase() == "radio"){
-                  code = code.concat(
+        if(schemaRelations != null){
+          for (var index in schemaRelations) {
+            firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+            if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+              secondTable = schemaRelations[index].secondTable; 
+              relationType = schemaRelations[index].relationType; 
+              secondTableColumn = schemaRelations[index].secondTableColumn;     
+              if(relationType.toLowerCase() == "select" || relationType.toLowerCase() == "onetomany" || relationType.toLowerCase() == "radio"){
+                    code = code.concat(
+                    '          <div className="form-group">\n' +
+                    '              <label  className="form-control"> Selected '+  secondTable+ ' : \n'
+                    );
+                      code = code.concat('                  {this.state.'+secondTable+'s.map('+secondTable+' => \n');
+                      code = code.concat('                      this.state.data["'+secondTable+'Id"] == '+secondTable+'._id ? " "+ '+secondTable+'.'+secondTableColumn+' : ""\n');
+                      code = code.concat('                  )}');
+                      code = code.concat('              </label>\n');
+                      code = code.concat('          </div>\n');                                           
+              }
+              else if(relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "manytomany" || relationType.toLowerCase() == "multiselect"){
+                code = code.concat(
                   '          <div className="form-group">\n' +
-                  '              <label  className="form-control"> Selected '+  tblRelations[index].tableName+ ' : \n'
+                  '              <label  className="form-control"> Selected '+  secondTable+ ' : \n'
                   );
-                    code = code.concat('                  {this.state.'+tblRelations[index].tableName+'s.map('+tblRelations[index].tableName+' => \n');
-                    code = code.concat('                      this.state.data["'+tblRelations[index].tableName+'Id"] == '+tblRelations[index].tableName+'._id ? " "+ '+tblRelations[index].tableName+'.'+dataProperty.name+' : ""\n');
-                    code = code.concat('                  )}');
+                    code = code.concat('                   {this.state.'+secondTable+'s.map('+secondTable+' => \n');
+                    code = code.concat('                       this.state.data["'+secondTable+'Ids"].includes('+secondTable+'._id) ? " "+ '+secondTable+'.'+secondTableColumn+'+"," : ""\n');
+                    code = code.concat('                  )}\n');
                     code = code.concat('              </label>\n');
                     code = code.concat('          </div>\n');                                           
-            }
-            else if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "manytomany" || tblRelations[index].type.toLowerCase() == "multiselect"){
-              code = code.concat(
-                '          <div className="form-group">\n' +
-                '              <label  className="form-control"> Selected '+  tblRelations[index].tableName+ ' : \n'
-                );
-                  code = code.concat('                  {this.state.'+tblRelations[index].tableName+'s.map('+tblRelations[index].tableName+' => \n');
-                  code = code.concat('                      this.state.data["'+tblRelations[index].tableName+'Ids"].includes('+tblRelations[index].tableName+'._id) ? " "+ '+tblRelations[index].tableName+'.'+dataProperty.name+'+"," : ""\n');
-                  code = code.concat('                  )}\n');
-                  code = code.concat('              </label>\n');
-                  code = code.concat('          </div>\n');                                           
+              }
             }
           }
         }

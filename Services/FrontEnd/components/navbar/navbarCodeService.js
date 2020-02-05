@@ -15,9 +15,9 @@ class navbarCodeService {
     return instance;
   }
 
-  GetNavbarFileCode(scheema) {
+  GetNavbarFileCode(schemaTables) {
     var navbarFileCode = this.getImportsAndReturn(); //imports
-    navbarFileCode += this.getSpecficNavLinks(scheema); // all close braces and exports
+    navbarFileCode += this.getSpecficNavLinks(schemaTables); // all close braces and exports
     navbarFileCode += this.getNavbarFileRemains();
     return navbarFileCode;
   }
@@ -34,9 +34,9 @@ class navbarCodeService {
     return code;
   }
 
-  getSpecficNavLinks(scheema) {
+  getSpecficNavLinks(schemaTables) {
     let tblName,code="";
-    if(scheema.length == 0 ){
+    if(schemaTables == null ){
       code += '        {user && (\n';
       code += '          <li className="nav-item active">\n';
       code += '            <NavLink className="nav-link custom-nav-link" to="/sampleComponent">\n';
@@ -46,8 +46,8 @@ class navbarCodeService {
       code += '        )}\n';
     }
     else{
-      for (var tableId in scheema) {
-        tblName = scheema[tableId].tableName; 
+      for (var tableId in schemaTables) {
+        tblName = schemaTables[tableId].name; 
         code += '        {user && (\n';
         code += '          <li className="nav-item active">\n';
         code += '            <NavLink className="nav-link custom-nav-link" to="/'+ tblName.toLowerCase() +'s">\n';

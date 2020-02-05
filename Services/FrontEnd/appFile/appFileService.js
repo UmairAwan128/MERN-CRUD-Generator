@@ -17,16 +17,14 @@ class appFileService {
     return instance;
   }
 
-  generateAppFile(scheema, folderPath, fileName) {
+  generateAppFile(schemaTables, folderPath, fileName) {
     try {
-      let appFileCode = appFileCodeServiceInst.GetAppFileCode(scheema); //generate App file COde
+      let appFileCode = appFileCodeServiceInst.GetAppFileCode(schemaTables); //generate App file COde
 
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, appFileCode, err => {
         if (err) {
           console.log(err);
-        } else {
-          //console.log("Sccessfully created " + fileName + " file");
         }
       });
       return true;

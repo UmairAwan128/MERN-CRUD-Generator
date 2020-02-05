@@ -18,17 +18,15 @@ class modelsService {
     return instance;
   }
 
-  generateModel(scheema, folderPath) {
+  generateModel(currentTable,schemaTables,schemaRelations, folderPath) {
     try {
-      let fileName = scheema.tableName+".js";
-      let modelCode = modelsCodeServiceInst.GetScheemaModelCode(scheema); 
+      let fileName = currentTable.name+".js";
+      let modelCode = modelsCodeServiceInst.GetScheemaModelCode(currentTable,schemaTables,schemaRelations); 
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, modelCode, err => {
         if (err) {
           console.log(err);
-        } else {
-          //console.log("Sccessfully created " + fileName + " file");
-        }
+        } 
       });
       return true;
     } catch (e) {

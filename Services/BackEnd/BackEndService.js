@@ -79,22 +79,32 @@ class BackEndService {
         "config",
         ".js"
       );
+      
+      FilesGenerated = sampleRecordServiceObj.generateSampleRecordFile(serviceFolderPath, "sampleRecord.js");
 
       //.................................CRUD Files....................................................................
 
+      var schemaTables = null; 
+      var schemaRelations = null;
+      if(scheema.hasOwnProperty('tables')){ //as relations is a optional property
+        schemaTables = scheema.tables; 
+      }
+      if(scheema.hasOwnProperty('relations')){ //as relations is a optional property
+        schemaRelations = scheema.relations; 
+      }
       //.......1.Common CRUD Files...............
-      FilesGenerated = appFileServiceObj.generateAppFile(scheema, projectFolderPath, "app.js"); 
-      FilesGenerated = sampleRecordServiceObj.generateSampleRecordFile(scheema, serviceFolderPath, "sampleRecord.js");
-
+      FilesGenerated = appFileServiceObj.generateAppFile(schemaTables, projectFolderPath, "app.js"); 
+      
       //.......2.CRUD Files...............
-      if(scheema.length == 0){ //if scheema passed is empty array this means user wants only auth files so return 
+      if(scheema == {}){ //if scheema passed is empty array this means user wants only auth files so return 
         //don,t go for the crud files
         return FilesGenerated;
-       }
- 
-      for (var tableId in scheema) {
-        FilesGenerated = modelServiceObj.generateModel(scheema[tableId], modelsFolderPath);
-        FilesGenerated = routeServiceObj.generateRouteFile(scheema[tableId], routuesFolderPath);
+      }
+
+       
+       for (var tableId in schemaTables) {
+        FilesGenerated = modelServiceObj.generateModel(schemaTables[tableId],schemaTables,schemaRelations, modelsFolderPath);
+        FilesGenerated = routeServiceObj.generateRouteFile(schemaTables[tableId],schemaRelations, routuesFolderPath);
       }      
 
       return FilesGenerated;

@@ -17,16 +17,14 @@ class navbarFileService {
     return instance;
   }
 
-  generateNavbarFile(scheema, folderPath, fileName) {
+  generateNavbarFile(schemaTables, folderPath, fileName) {
     try {
-      let navbarFileCode = navbarFileCodeServiceInst.GetNavbarFileCode(scheema); //generate App file COde
+      let navbarFileCode = navbarFileCodeServiceInst.GetNavbarFileCode(schemaTables); //generate App file COde
 
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, navbarFileCode, err => {
         if (err) {
           console.log(err);
-        } else {
-          //console.log("Sccessfully created " + fileName + " file");
         }
       });
       return true;

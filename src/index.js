@@ -24,7 +24,7 @@ inquirer
           {
             type: 'list',
             name: 'schemaLocation',
-            message: 'Please specify the location your scheema file?',
+            message: 'Please specify the location of your scheema file?',
             choices: [
               'Current Directory',
               'Other Directory'
@@ -53,7 +53,7 @@ inquirer
                           return generateAppFromSchema(compleFileName);
                         }
                       }
-                      return 'Please specify a valid file having extension txt or json';
+                      return 'Please specify a valid file having extension txt or json like like fileName.json';
                     }
                   }
                 ]).then(answers=>{
@@ -79,7 +79,7 @@ inquirer
                           return generateAppFromSchema(compleFileName);
                         }
                       }
-                      return 'Please enter a valid path having a file with extension json or txt';
+                      return 'Please enter a valid path having a file with extension json or txt like c:\\folderName\\fileName.json';
                     }
                   }
                 ]).then(answers=>{
@@ -119,10 +119,15 @@ inquirer
                           /^([\w]\:)(\\[a-z_\-\s0-9]+)+$/i
                         );
                         if (isfolderPathValid) {
-                          schemaServiceObj.generateAdminPannel(folderPath);
-                          return true;
+                          if(!fs.existsSync(folderPath)){ //if there is no such file
+                            return 'There is no such folder on the path provided, please enter name of folder that exists.';
+                          }
+                          else{ // if file found
+                            schemaServiceObj.generateAdminPannel(folderPath);
+                            return true;
+                          }
                         }
-                        return 'Please enter a valid path';
+                        return 'Please enter a valid path like like c:\\folderName';
                       }
                     }
                   ]).then(answers=>{
@@ -142,8 +147,7 @@ inquirer
 function generateAppFromSchema(compleFileName) {
   fs.readFile(compleFileName, 'utf8', function(err, scheema) {
     if (err) {
-      console.log("Failed to read file.");
-      console.log("reason : "+err.message);
+      console.log("Reading file failed due to following reasons :\n"+err.message);
     }
     else{
       const jsonSchema = JSON.parse(scheema);
@@ -175,10 +179,15 @@ function generateAppFromSchema(compleFileName) {
                         /^([\w]\:)(\\[a-z_\-\s0-9]+)+$/i
                       );
                       if (isfolderPathValid) {
-                        schemaServiceObj.generateCRUDApp(jsonSchema, folderPath);
-                        return true;
+                        if(!fs.existsSync(folderPath)){ //if there is no such file
+                          return 'There is no such folder on the path provided, please enter name of folder that exists.';
+                        }
+                        else{ // if file found
+                          schemaServiceObj.generateCRUDApp(jsonSchema, folderPath);
+                          return true;
+                        }
                       }
-                      return 'Please enter a valid path';
+                      return 'Please enter a valid path like like c:\\folderName';
                     }
                   }
                 ]).then(answers=>{

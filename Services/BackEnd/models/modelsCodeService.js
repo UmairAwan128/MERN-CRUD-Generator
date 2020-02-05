@@ -10,10 +10,10 @@ class modelsCodeService {
     return instance;
   }
 
-  GetScheemaModelCode(scheema) {
+  GetScheemaModelCode(currentTable,schemaTables,schemaRelations) { //
     var modelFileCode = this.getImports(); //imports
-    modelFileCode += this.getMongoDBScheema(scheema); 
-    modelFileCode += this.getExpots(scheema.tableName);
+    modelFileCode += this.getMongoDBScheema(currentTable,schemaTables,schemaRelations); 
+    modelFileCode += this.getExpots(currentTable.name);
     return modelFileCode;
   }
 
@@ -22,17 +22,20 @@ class modelsCodeService {
     return imprtStatmnts;
   }
 
-  getMongoDBScheema(scheema) {
-    let tblName = scheema.tableName; 
-    let tblColumns = scheema.columns;
+  getMongoDBScheema(currentTable,schemaTables,schemaRelations) {
+    
+    let tblName = currentTable.name; 
+    let tblColumns = currentTable.columns;
     let scheemaName = tblName+"Scheema";
     let MongoDBScheema = "";
     let fieldType = "";
+    
     MongoDBScheema = "const "+ scheemaName +" = mongoose.Schema({\n";
-    for (var index in tblColumns) { // 
+    
+    for (var index in tblColumns) { 
       fieldType = this.getMongoDBType(tblColumns[index].type);      
       MongoDBScheema = MongoDBScheema.concat(
-          "  " + tblColumns[index].label + ": {\n" +
+          "  " + tblColumns[index].name + ": {\n" +
           "    type: " + fieldType+ ","+"\n"
       );
       if(tblColumns[index].hasOwnProperty('required')){
@@ -45,45 +48,68 @@ class modelsCodeService {
       );
     }
 
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      let dataProperty;     
-      for (var index in tblRelations) {
-        dataProperty = tblRelations[index].dataProperty;
-        fieldType = this.getMongoDBType(dataProperty.type);      
-        
-        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"  || tblRelations[index].type.toLowerCase() == "manytomany"){
-          MongoDBScheema = MongoDBScheema.concat(
-            "  " + tblRelations[index].tableName + "s: {\n" +
-            "    type: [{\n" +            
-            "      Id: {\n" +
-            "        type: String,\n"+
-            "        required: true\n"+
-            "      },\n"+
-            "      Name: {\n" +
-            "        type: " + fieldType + ",\n"+
-            "        required: true\n"+
-            "      }\n"+
-            '    }],'+"\n"+
-            "    required: true\n"+
-            "  },\n"            
-          );
-        }
-        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "onetomany"){
-          MongoDBScheema = MongoDBScheema.concat(
-            "  " + tblRelations[index].tableName + ": {\n" +
-            "    Id: {\n" +
-            "      type: String,\n"+
-            "      required: true\n"+
-            "    },\n"+
-            "    Name: {\n" +
-            "      type: " + fieldType + ",\n"+
-            "      required: true\n"+
-            "    }\n"+
-            '  },'+"\n"
-          );
-        } 
-
+    if(schemaRelations != null){ //if not passed by user
+      let firstTable,secondTable,relationType,secondTableColumn,secondTableColumnType;
+      let innerTableName, innerColumns;
+          
+      for (var index in schemaRelations) { //so we have all the relations
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          secondTableColumn = schemaRelations[index].secondTableColumn; 
+          
+          //get the respective secondColumn type    
+          if(secondTable.toLowerCase() == "user"){ //if second table is User
+            secondTableColumnType = this.getMongoDBType("text"); //as all the fields are string type so direct text passed   
+          }
+          else{ //find the table in the schemaTables that user gave
+              for (var tableId in schemaTables) { //first find secondTable from all the tables
+                innerTableName = schemaTables[tableId].name;
+                if(innerTableName == secondTable){  //if found 
+                  innerColumns = schemaTables[tableId].columns;
+                  for (var colIndex in innerColumns) { //traverse through its columns
+                    if( innerColumns[colIndex].name == secondTableColumn){ //if column name is equal get respective type
+                      secondTableColumnType = this.getMongoDBType(innerColumns[colIndex].type);   
+                      break;   
+                    }
+                  }  
+                }
+              }
+          }
+          
+          if(relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "multiselect"  || relationType.toLowerCase() == "manytomany"){
+            MongoDBScheema = MongoDBScheema.concat(
+              "  " + secondTable + "s: {\n" +
+              "    type: [{\n" +            
+              "      Id: {\n" +
+              "        type: String,\n"+
+              "        required: true\n"+
+              "      },\n"+
+              "      Name: {\n" +
+              "        type: " + secondTableColumnType + ",\n"+
+              "        required: true\n"+
+              "      }\n"+
+              '    }],'+"\n"+
+              "    required: true\n"+
+              "  },\n"            
+            );
+          }
+          else if(relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "select" || relationType.toLowerCase() == "onetomany"){
+            MongoDBScheema = MongoDBScheema.concat(
+              "  " + secondTable + ": {\n" +
+              "    Id: {\n" +
+              "      type: String,\n"+
+              "      required: true\n"+
+              "    },\n"+
+              "    Name: {\n" +
+              "      type: " + secondTableColumnType + ",\n"+
+              "      required: true\n"+
+              "    }\n"+
+              '  },'+"\n"
+            );
+          }   
+        }        
       }
     }
     MongoDBScheema = MongoDBScheema.concat(

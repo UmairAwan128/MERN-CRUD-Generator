@@ -15,14 +15,14 @@ class tableCodeService {
     return instance;
   }
 
-  GenerateTableCode(scheema) {
-    let tblName = scheema.tableName;
+  GenerateTableCode(schemaTable,schemaRelations) {
+    let tblName = schemaTable.name;
     var tableCode = this.getImports(tblName); //imports
     tableCode += this.generateClassAndState(tblName); 
     tableCode += this.generateMethods(tblName); 
     tableCode += this.getTableMethods();
     tableCode += this.generateRenderMethod(tblName); 
-    tableCode += this.generateTableCode(scheema); 
+    tableCode += this.generateTableCode(schemaTable,schemaRelations); 
     tableCode += this.getPaginationAndCloseBraces(tblName); 
     return tableCode;
   }
@@ -30,7 +30,7 @@ class tableCodeService {
   getImports(tblName) {
     var filePath = tableFolderPath + "/imports.txt";
     var code = fs.readFileSync(path.resolve(filePath), "utf8");
-    code = code.concat('import { get'+ tblName +'s, delete'+ tblName +' } from "../services/'+ tblName.toLowerCase() +'Service";\n\n');
+    code = code.concat('import { get'+ tblName +'s, delete'+ tblName +' } from "../../services/'+ tblName.toLowerCase() +'Service";\n\n');
     return code;
   }
 
@@ -102,9 +102,10 @@ class tableCodeService {
     return code;
   }
 
-  generateTableCode(scheema) {
-    let tblName = scheema.tableName;
-    let tblColumns = scheema.columns;
+  generateTableCode(schemaTable,schemaRelations) {
+    let tblName = schemaTable.name;
+    let tblColumns = schemaTable.columns;
+    let firstTable,secondTable,relationType;
     let tableCode = "";
     let keyValue = 0;
     tableCode += '            <div className="table-responsive">\n\n';
@@ -119,13 +120,16 @@ class tableCodeService {
           '" style={{ cursor: "pointer" }}>\n                      '
       );
       tableCode = tableCode.concat(
-        tblColumns[column].label + "\n                    </th>\n"
+        tblColumns[column].name + "\n                    </th>\n"
       );
     }
 
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
           keyValue = keyValue + 1;
           tableCode = tableCode.concat(
             '                    <th scope="col" key="' +
@@ -133,16 +137,17 @@ class tableCodeService {
               '" style={{ cursor: "pointer" }}>\n                      '
           );
 
-          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
+          if(relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
             tableCode = tableCode.concat(
-              "Selected "+ tblRelations[index].tableName + "s\n                    </th>\n"
+              "Selected "+ secondTable + "s\n                    </th>\n"
             );
           }
-          else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"  || tblRelations[index].type.toLowerCase() == "onetomany"){
+          else if(relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "select"  || relationType.toLowerCase() == "onetomany"){
             tableCode = tableCode.concat(
-              tblRelations[index].tableName + "\n                    </th>\n"
+              secondTable + "\n                    </th>\n"
             );
           }
+        }
       }
     }
     
@@ -164,30 +169,33 @@ class tableCodeService {
         '                      <td key="' + keyValue + '">'
       );
       tableCode = tableCode.concat(
-        "{record." + tblColumns[column].label + "}</td>\n"
+        "{record." + tblColumns[column].name + "}</td>\n"
       );
     }
     
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      let dataProperty;    
-      for (var index in tblRelations) {
-        dataProperty = tblRelations[index].dataProperty;
-        keyValue = keyValue + 1;
-        tableCode = tableCode.concat(
-          '                      <td key="' + keyValue + '">'
-        );
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          
+          keyValue = keyValue + 1;
+          tableCode = tableCode.concat(
+            '                      <td key="' + keyValue + '">'
+          );
 
-        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect"  || tblRelations[index].type.toLowerCase() == "manytomany"){
-          tableCode = tableCode.concat(
-            "{record." + tblRelations[index].tableName + "s.length}</td>\n"
-          );
-        }
-        else if(tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "select"  || tblRelations[index].type.toLowerCase() == "onetomany"){
-          tableCode = tableCode.concat(
-            "{record." + tblRelations[index].tableName + ".Name}</td>\n"
-          );
-        }
+          if(relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "multiselect"  || relationType.toLowerCase() == "manytomany"){
+            tableCode = tableCode.concat(
+              "{record." + secondTable + "s.length}</td>\n"
+            );
+          }
+          else if(relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "select"  || relationType.toLowerCase() == "onetomany"){
+            tableCode = tableCode.concat(
+              "{record." + secondTable + ".Name}</td>\n"
+            );
+          }
+        }  
       }
     }
 

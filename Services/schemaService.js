@@ -5,8 +5,6 @@ const rimraf = require('rimraf');  //for deleting old output project folder cont
 const CRUDConfigurations = require("../CRUD_Config");
 const CRUDGeneratorService = require("./CRUDGeneratorService");
 
-const outputFolderpath = path.join(__dirname, '../') +"\output\\";
-
 let instance = null;
 let CRUDGeneratorServiceObj = null;
 
@@ -34,20 +32,22 @@ class schemaService {
                   //console.log("Some Files Failed to Generate.");
                 }
                 zipFolder.zipFolder(
-                outputFolderpath +"\\output\\"+ CRUDConfigurations.ProjectFolderName,
-                outputFolderpath + "\\output\\" + CRUDConfigurations.ProjectFolderName+ ".zip", 
+                outputFolderpath +"\\AppGenerated\\"+ CRUDConfigurations.ProjectFolderName,
+                outputFolderpath + "\\AppGenerated\\" + CRUDConfigurations.ProjectFolderName+ ".zip", 
                 function(err) { 
                     if(err) {
-                        console.log('Some thing went wrong while making Zip of your project', err);
+                        console.log('\nSome thing went wrong while making Zip of your project deatils regarding errors are wrote to the file in the follwing location:');
+                        this.createErrorsFile(outputFolderpath,err);
                     }
                     else {
-                        console.log('Your project is ready and is created at :\n\t'+ outputFolderpath +"\\output\\");
+                        console.log('\nYour project is ready and is created at :\n\t'+ outputFolderpath +"\\AppGenerated\\");
                     }
                 });
                    
             }
             else{
-                console.log("Scheema Validation Failed because of following reasons :\n"+ schemaValidationErrors);
+                console.log('\nSchema provided is not valid, deatils regarding errors are wrote to the file in the follwing location:');
+                this.createErrorsFile(outputFolderpath, "Schema Validation Failed because of following reasons :\n"+ schemaValidationErrors);
             }
         }
         catch(ex){
@@ -62,31 +62,42 @@ class schemaService {
             //create new CRUD as in this case scheema is empty so will return admin pannel only
             let isCRUDGenerated = CRUDGeneratorServiceObj.generateCRUD(scheemaString,outputFolderpath);
             if (!isCRUDGenerated) {
-                console.log("Some Files Failed to Generate.");
+                console.log("\nSome Files Failed to Generate.");
             }
             zipFolder.zipFolder(
-            outputFolderpath + "\\output\\" + CRUDConfigurations.ProjectFolderName,
-            outputFolderpath + "\\output\\" + CRUDConfigurations.ProjectFolderName+ ".zip", 
+            outputFolderpath + "\\AppGenerated\\" + CRUDConfigurations.ProjectFolderName,
+            outputFolderpath + "\\AppGenerated\\" + CRUDConfigurations.ProjectFolderName+ ".zip", 
             function(err) { 
                 if(err) {
-                    console.log('Some thing went wrong while making Zip of your project', err);
+                    console.log('\nSome thing went wrong while making Zip of your project deatils regarding errors are wrote to the file in the follwing location:');
+                    this.createErrorsFile(outputFolderpath,err);
                 }
                 else {
-                    console.log('Your project is ready and is created at :\n\t'+ outputFolderpath +"\\output\\");      
+                    console.log('\nYour project is ready and is created at :\n'+ outputFolderpath +"\\AppGenerated\\");      
                 }
             });         
         }
         catch(ex){
-            console.log(ex.message);
+            console.log('\nAn Expeption Occur while generating project, deatils regarding exception are wrote to the file in the follwing location:');
+            this.createErrorsFile(outputFolderpath,"\nAn Expeption Occur while generating project\n : "+ex);
         }
     }
 
-    removeOldProject()
-    {
-        rimraf( outputFolderpath+'/*' , function () { console.log('old project removed.'); });
-        res.send("Project Successfully removed.");
-    }
+    // removeOldProject()
+    // {
+    //     rimraf( outputFolderpath+'/*' , function () { console.log('old project removed.'); });
+    //     console.log("Project Successfully removed.");
+    // }
 
+    createErrorsFile(outputFolderpath,errors){
+       let fileName = "errors.txt";
+       console.log('\t'+outputFolderpath+'\\'+fileName);               
+        fs.writeFile(outputFolderpath + "/" + fileName, errors, err => {
+          if (err) {
+            console.log(err);
+          }
+        });
+    }
 }
 
 module.exports = schemaService;

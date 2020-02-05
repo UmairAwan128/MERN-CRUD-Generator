@@ -17,15 +17,13 @@ class sampleRecordService {
     return instance;
   }
 
-  generateSampleRecordFile(scheema, folderPath, fileName) {
+  generateSampleRecordFile(folderPath, fileName) {
     try {
-      let Code = sampleRecordCodeServiceInst.GetSampleRecordFileCode(scheema); //generate App file COde
+      let Code = sampleRecordCodeServiceInst.GetSampleRecordFileCode(); //generate file COde
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, Code, err => {
         if (err) {
           console.log(err);
-        } else {
-          //console.log("Sccessfully created " + fileName + " file");
         }
       });
       return true;

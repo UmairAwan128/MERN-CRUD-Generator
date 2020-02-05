@@ -78,7 +78,6 @@ class FrontEndService {
         if (!fs.existsSync(componentsFolderPath)) {
           fs.mkdirSync(componentsFolderPath);
         }
-
         
         //.....................Other Folders.....................................
         
@@ -212,26 +211,32 @@ class FrontEndService {
 
         
        //..............................CRUD Releated Files........................................
-       
+       var schemaTables = null; 
+       var schemaRelations = null;
+       if(scheema.hasOwnProperty('tables')){ //as relations is a optional property
+         schemaTables = scheema.tables; 
+       }
+       if(scheema.hasOwnProperty('relations')){ //as relations is a optional property
+         schemaRelations = scheema.relations; 
+       } 
+
        //.......1.Common CRUD Files...............
        
        //.......................src folder files
        
-       FilesGenerated = appFileServiceObj.generateAppFile(scheema, srcFolderPath, "App.js") 
+       FilesGenerated = appFileServiceObj.generateAppFile(schemaTables, srcFolderPath, "App.js") 
        
        //.......................component folder files
        
        FilesGenerated = navbarComponentsServiceObj.generateNavbarFile(
-        scheema,
+        schemaTables,
         componentsFolderPath,
         "navbar.jsx"
        );
        
 
        //.......2. CRUD Files...............
-
-       if(scheema.length == 0){ //if scheema passed is empty array this means user wants only auth files so return 
-        //don,t go for the crud files but generate a sample compoent.
+       if( scheema == "" ){ //if scheema passed is empty
           FilesGenerated = otherComponentsServiceObj.generateComponentFile(
             componentsFolderPath,
             "sampleComponent"
@@ -239,23 +244,32 @@ class FrontEndService {
           return FilesGenerated;
        }
 
-       for (var tableId in scheema) {
+       for (var tableId in schemaTables) {
           
-          let tblName = scheema[tableId].tableName; 
-          
+          let tblName = schemaTables[tableId].name; 
+
+          //create seperate folder for all the component files of specific table inside components folder
+          let specificcomponentFolderPath = componentsFolderPath + "/" + tblName.toLowerCase(); 
+          if (!fs.existsSync(specificcomponentFolderPath)) {
+            fs.mkdirSync(specificcomponentFolderPath);
+          }
+  
           FilesGenerated = tblServiceObj.generateTblCRUDFile(
-            scheema[tableId],
-            componentsFolderPath,
+            schemaTables[tableId],
+            schemaRelations,
+            specificcomponentFolderPath,
           );
           
           FilesGenerated = formServiceObj.generateFormCRUDFile(
-            scheema[tableId],
-            componentsFolderPath
+            schemaTables[tableId],
+            schemaRelations,
+            specificcomponentFolderPath
           );
 
           FilesGenerated = detailsServiceObj.generateDetailsCRUDFile(
-            scheema[tableId],
-            componentsFolderPath
+            schemaTables[tableId],
+            schemaRelations,
+            specificcomponentFolderPath
           );
 
           //......................Services folder files

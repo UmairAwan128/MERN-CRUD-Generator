@@ -15,32 +15,32 @@ class appFileCodeService {
     return instance;
   }
 
-  GetAppFileCode(scheema) {
+  GetAppFileCode(schemaTables) {
     var appFileCode = this.getImports(); //imports
-    appFileCode += this.getRouteImports(scheema); 
+    appFileCode += this.getRouteImports(schemaTables); 
     appFileCode += this.getMiddlewares();
-    appFileCode += this.getApiEndPointMiddlewares(scheema); 
-    appFileCode += this.getAppFileRemains(scheema);
+    appFileCode += this.getApiEndPointMiddlewares(schemaTables); 
+    appFileCode += this.getAppFileRemains();
     return appFileCode;
   }
 
   //returns a specific import statment of Route file for specific Table.
-  getRouteImports(scheema) {
+  getRouteImports(schemaTables) {
     let imprtStatmnt = "";
     let tblName,routeName;
-    for (var tableId in scheema) {
-      tblName = scheema[tableId].tableName; 
+    for (var tableId in schemaTables) {
+      tblName = schemaTables[tableId].name; 
       routeName = tblName + 's';
       imprtStatmnt = imprtStatmnt.concat('const ' + routeName + 'Route = require("./routes/'+ routeName +'");\n');
     }
     return imprtStatmnt;
   }
 
-  getApiEndPointMiddlewares(scheema) {
+  getApiEndPointMiddlewares(schemaTables) {
     let middlewareStatmnt = "";
     let tblName,routeName;
-    for (var tableId in scheema) {
-      tblName = scheema[tableId].tableName; 
+    for (var tableId in schemaTables) {
+      tblName = schemaTables[tableId].name; 
       routeName = tblName + 's';
       middlewareStatmnt = middlewareStatmnt.concat('app.use("/api/' + routeName.toLowerCase() + '", '+ routeName +'Route);\n');
     }
@@ -60,12 +60,9 @@ class appFileCodeService {
     return code;
   }
 
-  getAppFileRemains(scheema) {
+  getAppFileRemains() {
     var filePath = appFilesFolderPath + "/appRemains.txt";
     var code = fs.readFileSync(path.resolve(filePath), "utf8");
-    // if(scheema.length !== 0 ){
-    //   code = code.concat('  createServiceObj.createSampleRecord();\n\n');
-    // }  
     code = code.concat("app.listen(5000,()=> console.log('listening on port 5000'));\n");
     return code;
   }

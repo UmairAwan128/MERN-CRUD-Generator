@@ -17,10 +17,10 @@ class formsService {
     return instance;
   }
 
-  generateFormCRUDFile(scheema, folderPath) {
-    let fileName = scheema.tableName.toLowerCase() + "Form.jsx";
+  generateFormCRUDFile(schemaTable,schemaRelations, folderPath) {
+    let fileName = schemaTable.name.toLowerCase() + "Form.jsx";
     try {
-      let formCode = formsCodeServiceInst.GenerateFormCode(scheema); //generate table code
+      let formCode = formsCodeServiceInst.GenerateFormCode(schemaTable,schemaRelations); //generate table code
       //now create the file and write the code inside it
       fs.writeFile(folderPath + "/" + fileName, formCode, err => {
         if (err) {

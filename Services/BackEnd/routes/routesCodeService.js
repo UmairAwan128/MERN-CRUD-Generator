@@ -10,27 +10,29 @@ class routesCodeService {
     return instance;
   }
 
-  GetRouteModelCode(scheema) {
-    let tblName = scheema.tableName;
-    var modelFileCode = this.getImports(scheema); //imports
+  GetRouteModelCode(schemaTable, schemaRelations) {
+    let tblName = schemaTable.name;
+    var modelFileCode = this.getImports(tblName, schemaRelations); //imports
     modelFileCode += this.getIndexRoute(tblName); 
-    modelFileCode += this.getSpecificRecordRoute(scheema); 
-    modelFileCode += this.getPostRoute(scheema); 
+    modelFileCode += this.getSpecificRecordRoute(schemaTable, schemaRelations); 
+    modelFileCode += this.getPostRoute(schemaTable, schemaRelations); 
     modelFileCode += this.getDeleteRecordRoute(tblName); 
-    modelFileCode += this.getPutRoute(scheema); 
+    modelFileCode += this.getPutRoute(schemaTable, schemaRelations); 
     modelFileCode += this.getExpots();
     return modelFileCode;
   }
 
-  getImports(scheema) {
+  getImports(tableName,schemaRelations) {
     let imprtStatmnts = 'const express = require("express");\n';
     imprtStatmnts += 'const router = express.Router(); \n';
     imprtStatmnts += 'const verify = require("./verifyToken"); \n';
-    imprtStatmnts = imprtStatmnts.concat('const ' + scheema.tableName + ' = require("../models/'+ scheema.tableName +'");\n');
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        imprtStatmnts += 'const ' + tblRelations[index].tableName + '= require("../models/'+ tblRelations[index].tableName +'");\n'; 
+    imprtStatmnts = imprtStatmnts.concat('const ' + tableName + ' = require("../models/'+ tableName +'");\n');
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        // get each realtions firstTable and if its same as the currentTable i.e tableName then this relation belongs to current table
+        if( tableName == schemaRelations[index].firstTable){  
+          imprtStatmnts += 'const ' + schemaRelations[index].secondTable + '= require("../models/'+ schemaRelations[index].secondTable +'");\n'; 
+        }
       }
     }
     imprtStatmnts += '\n'; 
@@ -51,27 +53,33 @@ class routesCodeService {
     return route;
   }
 
-  getSpecificRecordRoute(scheema) {
+  getSpecificRecordRoute(schemaTable, schemaRelations) {
     let route = "";
-    let tblName = scheema.tableName;
-    let tblColumns = scheema.columns;
-    
+    let tblName = schemaTable.name;
+    let tblColumns = schemaTable.columns;
+    let firstTable,secondTable,relationType;
+      
     route += 'router.get("/:id", verify, async (req, res) => {\n';
     route = route.concat(
        '  try {\n'+
        '    const ' + tblName.toLowerCase() + ' = await '+ tblName +'.findById(req.params.id);\n' 
     );
 
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
-          route = route.concat(
-            '    let '+tblRelations[index].tableName.toLowerCase()+'Ids = new Array();\n'+
-            '    for(var i=0; i<' + tblName.toLowerCase() + '.'+tblRelations[index].tableName+'s.length; i++){\n'+ 
-            '      '+tblRelations[index].tableName.toLowerCase()+'Ids.push(' + tblName.toLowerCase() + '.'+tblRelations[index].tableName+'s[i].Id);\n'+
-            '    }\n' 
-         );             
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          if(relationType.toLowerCase() == "checkbox"  || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
+            route = route.concat(
+              '    let '+secondTable.toLowerCase()+'Ids = new Array();\n'+
+              '    for(var i=0; i<' + firstTable.toLowerCase() + '.'+secondTable+'s.length; i++){\n'+ 
+              '      '+secondTable.toLowerCase()+'Ids.push(' + firstTable.toLowerCase() + '.'+secondTable+'s[i].Id);\n'+
+              '    }\n' 
+           );             
+          }
+  
         }
       }        
     }
@@ -83,26 +91,30 @@ class routesCodeService {
 
     for (var column in tblColumns) {
       route = route.concat(
-          "        " + tblColumns[column].label + ": " +tblName.toLowerCase()+"." +tblColumns[column].label+",\n"
+          "        " + tblColumns[column].name + ": " +tblName.toLowerCase()+"." +tblColumns[column].name+",\n"
       ); 
     }        
 
-    if(scheema.hasOwnProperty('relations')){
-      let tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
-          route = route.concat(
-            "        " + tblRelations[index].tableName + "Id: " +tblName.toLowerCase()+"." +tblRelations[index].tableName+".Id,\n"
-          ); 
+    if(schemaRelations != null){
+      for (var index in schemaRelations) {
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          if(relationType.toLowerCase() == "select" || relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "onetomany"){
+            route = route.concat(
+              "        " + secondTable + "Id: " +firstTable.toLowerCase()+"." +secondTable+".Id,\n"
+            ); 
+          }
+          else if(relationType.toLowerCase() == "checkbox"  || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
+            route = route.concat(
+              "        " + secondTable + "Ids: " +secondTable.toLowerCase()+"Ids,\n" 
+            );
+          }
         }
-        else if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
-          route = route.concat(
-            "        " + tblRelations[index].tableName + "Ids: " +tblRelations[index].tableName.toLowerCase()+"Ids,\n" 
-          );
-        }
-
       }        
     }
+
     route = route.concat(
       "        createdAt: " +tblName.toLowerCase()+".createdAt"+"\n"
     );
@@ -115,63 +127,72 @@ class routesCodeService {
     return route;
   }
 
-  getPostRoute(scheema) {
+  getPostRoute(schemaTable, schemaRelations) {
     let route = "";
-    let tblName = scheema.tableName;
-    let tblColumns = scheema.columns;
-    let tblRelations;
+    let tblName = schemaTable.name;
+    let tblColumns = schemaTable.columns;
+    let firstTable,secondTable,relationType,secondTableColumn;
+      
     route += 'router.post("/", verify, async (req, res) => {\n';
     route +='  try {\n';
     
-    if(scheema.hasOwnProperty('relations')){
-      let dataProperty;
-      tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        dataProperty = tblRelations[index].dataProperty;
-        if(tblRelations[index].type.toLowerCase() == "checkbox"  || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
-          route = route.concat(
-            '    let '+tblRelations[index].tableName.toLowerCase()+'s = new Array();\n'+
-            '    for(var i=0; i<req.body.'+tblRelations[index].tableName+'Ids.length; i++){\n'+ 
-            '      const '+tblRelations[index].tableName.toLowerCase()+' = await '+tblRelations[index].tableName+'.findById(req.body.'+tblRelations[index].tableName+'Ids[i]);\n'+
-            '      '+tblRelations[index].tableName.toLowerCase()+'s.push(\n'+
-            '        {\n'+ 
-            '          Id: '+tblRelations[index].tableName.toLowerCase()+'._id,\n'+ 
-            '          Name: '+tblRelations[index].tableName.toLowerCase()+'.'+dataProperty.name+'\n'+ 
-            '        }\n'+ 
-            '      );\n'+ 
-            '    }\n' 
-         );             
+    if(schemaRelations != null){ //if not passed by user
+      for (var index in schemaRelations) { //so we have all the relations 
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          secondTableColumn = schemaRelations[index].secondTableColumn;         
+          if(relationType.toLowerCase() == "checkbox"  || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
+            route = route.concat(
+              '    let '+secondTable.toLowerCase()+'s = new Array();\n'+
+              '    for(var i=0; i<req.body.'+secondTable+'Ids.length; i++){\n'+ 
+              '      const '+secondTable.toLowerCase()+' = await '+secondTable+'.findById(req.body.'+secondTable+'Ids[i]);\n'+
+              '      '+secondTable.toLowerCase()+'s.push(\n'+
+              '        {\n'+ 
+              '          Id: '+secondTable.toLowerCase()+'._id,\n'+ 
+              '          Name: '+secondTable.toLowerCase()+'.'+secondTableColumn+'\n'+ 
+              '        }\n'+ 
+              '      );\n'+ 
+              '    }\n' 
+           );             
+          }
+          else if(relationType.toLowerCase() == "select" || relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "onetomany"){
+            route += '    const ' + secondTable.toLowerCase() + ' = await '+ secondTable +'.findById(req.body.'+ secondTable +'Id);\n'; 
+          }
         }
-        else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
-          route += '    const ' + tblRelations[index].tableName.toLowerCase() + ' = await '+ tblRelations[index].tableName +'.findById(req.body.'+ tblRelations[index].tableName +'Id);\n'; 
-        }
+
       }
     }
 
     route += "    const "+ tblName.toLowerCase() +" = new "+tblName+" ({\n";
     for (var column in tblColumns) {
       route = route.concat(
-          "        " + tblColumns[column].label + ": " + "req.body." +tblColumns[column].label+","+ "\n"
+          "        " + tblColumns[column].name + ": " + "req.body." +tblColumns[column].name+","+ "\n"
       ); 
     }
-    if(scheema.hasOwnProperty('relations')){
-      let dataProperty;     
-      tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-          dataProperty = tblRelations[index].dataProperty;
-          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
-            route = route.concat(
-              "        " + tblRelations[index].tableName + "s: "  + tblRelations[index].tableName.toLowerCase() + "s,\n"
+
+    if(schemaRelations != null){ //if not passed by user
+      for (var index in schemaRelations) { //so we have all the relations 
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          secondTableColumn = schemaRelations[index].secondTableColumn;         
+          if(relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
+              route = route.concat(
+                "        " + secondTable + "s: "  + secondTable.toLowerCase() + "s,\n"
+                );
+            }
+            else if(relationType.toLowerCase() == "select" || relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "onetomany"){
+              route = route.concat(
+              "        " + secondTable + ": {\n" +
+              "          Id: " +secondTable.toLowerCase()+"._id,\n"+
+              "          Name: " +secondTable.toLowerCase()+"."+secondTableColumn+"\n"+
+              "        },\n"
               );
-          }
-          else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
-            route = route.concat(
-            "        " + tblRelations[index].tableName + ": {\n" +
-            "          Id: " +tblRelations[index].tableName.toLowerCase()+"._id,\n"+
-            "          Name: " +tblRelations[index].tableName.toLowerCase()+"."+dataProperty.name+"\n"+
-            "        },\n"
-            );
-          }
+            }
+        }
       }        
     }
     
@@ -200,35 +221,39 @@ class routesCodeService {
     return route;
   }
 
-  getPutRoute(scheema) {
-    let tblName = scheema.tableName;
-    let tblColumns = scheema.columns;
+  getPutRoute(schemaTable,schemaRelations) {
+    let tblName = schemaTable.name; 
+    let tblColumns = schemaTable.columns;
     let route = "";
-    let tblRelations;
+    let firstTable,secondTable,relationType,secondTableColumn;
+
     route += 'router.put("/:id", verify, async (req, res) => {\n';
     route += '  try {\n';
 
-    if(scheema.hasOwnProperty('relations')){
-      let dataProperty;     
-      tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-        dataProperty = tblRelations[index].dataProperty;
-        if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
-          route = route.concat(
-            '    let '+tblRelations[index].tableName.toLowerCase()+'s = new Array();\n'+
-            '    for(var i=0; i<req.body.'+tblRelations[index].tableName+'Ids.length; i++){\n'+ 
-            '      const '+tblRelations[index].tableName.toLowerCase()+' = await '+tblRelations[index].tableName+'.findById(req.body.'+tblRelations[index].tableName+'Ids[i]);\n'+
-            '      '+tblRelations[index].tableName.toLowerCase()+'s.push(\n'+
-            '        {\n'+ 
-            '          Id: '+tblRelations[index].tableName.toLowerCase()+'._id,\n'+ 
-            '          Name: '+tblRelations[index].tableName.toLowerCase()+'.'+dataProperty.name+'\n'+ 
-            '        }\n'+ 
-            '      );\n'+ 
-            '    }\n' 
-         );             
-        }
-        else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
-          route += '    const ' + tblRelations[index].tableName.toLowerCase() + ' = await '+ tblRelations[index].tableName +'.findById(req.body.'+ tblRelations[index].tableName +'Id);\n'; 
+    if(schemaRelations != null){ //if not passed by user
+      for (var index in schemaRelations) { //so we have all the relations 
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          secondTableColumn = schemaRelations[index].secondTableColumn;          
+          if(relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
+            route = route.concat(
+              '    let '+secondTable.toLowerCase()+'s = new Array();\n'+
+              '    for(var i=0; i<req.body.'+secondTable+'Ids.length; i++){\n'+ 
+              '      const '+secondTable.toLowerCase()+' = await '+secondTable+'.findById(req.body.'+secondTable+'Ids[i]);\n'+
+              '      '+secondTable.toLowerCase()+'s.push(\n'+
+              '        {\n'+ 
+              '          Id: '+secondTable.toLowerCase()+'._id,\n'+ 
+              '          Name: '+secondTable.toLowerCase()+'.'+secondTableColumn+'\n'+ 
+              '        }\n'+ 
+              '      );\n'+ 
+              '    }\n' 
+          );             
+          }
+          else if(relationType.toLowerCase() == "select" || relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "onetomany"){
+            route += '    const ' + secondTable.toLowerCase() + ' = await '+ secondTable +'.findById(req.body.'+ secondTable +'Id);\n'; 
+          }
         }
       }
     }
@@ -238,30 +263,33 @@ class routesCodeService {
     route += "      { _id: req.params.id },\n      {\n        $set:{\n";
     for (var column in tblColumns) {
       route = route.concat(
-        "             " + tblColumns[column].label + ": " + "req.body." +tblColumns[column].label+",\n"
+        "             " + tblColumns[column].name + ": " + "req.body." +tblColumns[column].name+",\n"
       ); 
     }
 
 
-    if(scheema.hasOwnProperty('relations')){
-      let dataProperty;     
-      tblRelations = scheema.relations;
-      for (var index in tblRelations) {
-          dataProperty = tblRelations[index].dataProperty;
-          if(tblRelations[index].type.toLowerCase() == "checkbox" || tblRelations[index].type.toLowerCase() == "multiselect" || tblRelations[index].type.toLowerCase() == "manytomany"){
+    if(schemaRelations != null){ //if not passed by user
+      for (var index in schemaRelations) { //so we have all the relations 
+        firstTable = schemaRelations[index].firstTable; // get each realtions firstTable 
+        if( tblName == firstTable){ // if its same as the currentTable i.e tblName then this relation belongs to current table
+          secondTable = schemaRelations[index].secondTable; 
+          relationType = schemaRelations[index].relationType; 
+          secondTableColumn = schemaRelations[index].secondTableColumn;         
+          if(relationType.toLowerCase() == "checkbox" || relationType.toLowerCase() == "multiselect" || relationType.toLowerCase() == "manytomany"){
             route = route.concat(
-              "        " + tblRelations[index].tableName + "s: "  + tblRelations[index].tableName.toLowerCase() + "s,\n"
+              "        " + secondTable + "s: "  + secondTable.toLowerCase() + "s,\n"
               );
           }
-          else if(tblRelations[index].type.toLowerCase() == "select" || tblRelations[index].type.toLowerCase() == "radio" || tblRelations[index].type.toLowerCase() == "onetomany"){
+          else if(relationType.toLowerCase() == "select" || relationType.toLowerCase() == "radio" || relationType.toLowerCase() == "onetomany"){
             route = route.concat(
-              "             " + tblRelations[index].tableName + ": {\n" +
-              "              Id: " +tblRelations[index].tableName.toLowerCase()+"._id,\n"+
-              "              Name: " +tblRelations[index].tableName.toLowerCase()+"."+dataProperty.name+"\n"+
+              "             " + secondTable + ": {\n" +
+              "              Id: " +secondTable.toLowerCase()+"._id,\n"+
+              "              Name: " +secondTable.toLowerCase()+"."+secondTableColumn+"\n"+
               "             },\n"
             ); 
   
           }
+        }
       }        
     }
 
