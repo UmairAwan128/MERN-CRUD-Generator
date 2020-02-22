@@ -20,14 +20,14 @@ class schemaService {
       return instance;
     }
   
-    generateCRUDApp(scheemaJson, outputFolderpath) 
+    generateCRUDApp(scheemaJson, outputFolderpath,onlyNodeApp) 
     {
         try{
             var schemaValidationErrors = CRUDGeneratorServiceObj.validateScheema(scheemaJson);
             if(schemaValidationErrors == ""){ //if the scheema is in valid format so there will be no errors                
                 //console.log(scheemaJson);
                 //create new CRUD
-                let isCRUDGenerated = CRUDGeneratorServiceObj.generateCRUD(scheemaJson, outputFolderpath);
+                let isCRUDGenerated = CRUDGeneratorServiceObj.generateCRUD(scheemaJson, outputFolderpath,onlyNodeApp);
                 if (!isCRUDGenerated) {
                   //console.log("Some Files Failed to Generate.");
                 }
@@ -37,10 +37,11 @@ class schemaService {
                 function(err) { 
                     if(err) {
                         console.log('\nSome thing went wrong while making Zip of your project deatils regarding errors are wrote to the file in the follwing location:');
-                        this.createErrorsFile(outputFolderpath,err);
+                        instance.createErrorsFile(outputFolderpath,err);
                     }
                     else {
                         console.log('\nYour project is ready and is created at :\n\t'+ outputFolderpath +"\\AppGenerated\\");
+                        instance.removeErrorsFile(outputFolderpath);      
                     }
                 });
                    
@@ -51,16 +52,18 @@ class schemaService {
             }
         }
         catch(ex){
-          console.log(ex.message);
+           console.log('\nAn Expeption Occur while generating project, deatils regarding exception are wrote to the file in the follwing location:');
+           this.createErrorsFile(outputFolderpath,"\nAn Expeption Occur while generating project\n : "+ex);
         }
     }
 
     generateAdminPannel(outputFolderpath) 
     {
         try{
+            const onlyNodeApp = false;
             var scheemaString = "{}"; //passed empty scheema object
             //create new CRUD as in this case scheema is empty so will return admin pannel only
-            let isCRUDGenerated = CRUDGeneratorServiceObj.generateCRUD(scheemaString,outputFolderpath);
+            let isCRUDGenerated = CRUDGeneratorServiceObj.generateCRUD(scheemaString,outputFolderpath,onlyNodeApp);
             if (!isCRUDGenerated) {
                 console.log("\nSome Files Failed to Generate.");
             }
@@ -70,10 +73,11 @@ class schemaService {
             function(err) { 
                 if(err) {
                     console.log('\nSome thing went wrong while making Zip of your project deatils regarding errors are wrote to the file in the follwing location:');
-                    this.createErrorsFile(outputFolderpath,err);
+                    instance.createErrorsFile(outputFolderpath,err);
                 }
                 else {
-                    console.log('\nYour project is ready and is created at :\n'+ outputFolderpath +"\\AppGenerated\\");      
+                    console.log('\nYour project is ready and is created at :\n'+ outputFolderpath +"\\AppGenerated\\");
+                    instance.removeErrorsFile(outputFolderpath);
                 }
             });         
         }
@@ -89,8 +93,16 @@ class schemaService {
     //     console.log("Project Successfully removed.");
     // }
 
+    removeErrorsFile(outputFolderpath){
+        const fileName = "errors.txt";
+        const filePath = outputFolderpath + "/" + fileName;
+        if(fs.existsSync(filePath)){ //if file exists
+            fs.unlinkSync(filePath); //remove it
+        }
+    }
+    
     createErrorsFile(outputFolderpath,errors){
-       let fileName = "errors.txt";
+       const fileName = "errors.txt";
        console.log('\t'+outputFolderpath+'\\'+fileName);               
         fs.writeFile(outputFolderpath + "/" + fileName, errors, err => {
           if (err) {

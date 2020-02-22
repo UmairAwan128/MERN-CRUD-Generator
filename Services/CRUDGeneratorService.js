@@ -22,17 +22,12 @@ class CRUDGeneratorService {
       return instance;
     }
   
-    generateCRUD(scheema, outputFolderLoc) {//C:\Work\UNIRelated\FYP\pack\CRUD_Generator_React
+    generateCRUD(scheema, outputFolderLoc,onlyNodeApp) {//C:\Work\UNIRelated\FYP\pack\CRUD_Generator_React
         
       const appScheema = scheema["appSchema"] ? scheema["appSchema"] : ""; //get appScheema
       const databaseName = scheema["appDbName"] ? scheema["appDbName"] : "";
       const applicationName = scheema["appName"] ? scheema["appName"] : "";
       const applicationTheme = scheema["appTheme"] ? scheema["appTheme"] : "";
-     
-      //const tblName = scheema[0].tableName;
-      //const tblColumns = scheema[0].columns;
-      //this.showScheema(appScheema);
-       
       let outputFolderName = "AppGenerated"; 
       let projectFolderName, ReactProjectFolderName, NodeProjectFolderName, projectDatabaseName;
 
@@ -96,10 +91,12 @@ class CRUDGeneratorService {
             NodeProjectFolderCompName
           );
           
-          isCodeGenerated = frontEndGenerateServiceObj.generateFrontEnd(
-            appScheema,
-            ReactProjectFolderCompName
-          );
+          if(onlyNodeApp == false){  //only if 
+            isCodeGenerated = frontEndGenerateServiceObj.generateFrontEnd(
+              appScheema,
+              ReactProjectFolderCompName
+            );
+          }
           
           return isCodeGenerated;
       } 
@@ -243,21 +240,6 @@ class CRUDGeneratorService {
         },
         "required": ["appSchema"]
       };
-      // //can be used as dummy appScheema to test this method
-      // var testScheema = [
-      //   {
-      //     "tableName":"Product",
-      //     "columns":[
-      //         {"label":"Name","type":"text","required":true},
-      //     ]
-      //   },
-      //   {
-      //     "tableName":"User",
-      //     "columns":[
-      //       {"label":"Name","type":"text","required":true},
-      //     ]
-      //   }
-      // ];
 
       validator.addSchema(columnsScheema, '/tblColumn');
       validator.addSchema(tblSchema, '/tblScheema');
@@ -280,6 +262,8 @@ class CRUDGeneratorService {
         }
         
         //check if user has made relations b/w the tables that exist in Scheema
+        //and if a relation is not defined again with another relation type 
+        //and relation is not redefine from other side i.e for first->second we are getting second -> first 
         for (var relationId in schemaRelations) { // in case of relation there are two tables first table makes relation with second table column
            
             var firstTable = schemaRelations[relationId].firstTable;
@@ -297,6 +281,7 @@ class CRUDGeneratorService {
               return errors;   
             }    
   
+            //check if user has made relations b/w the tables that exist in Scheema
             for(var tableId in schemaTables){
               
               var tableName = schemaTables[tableId].name; 
@@ -352,37 +337,23 @@ class CRUDGeneratorService {
               return errors;
             }
 
+            //check if a relation is not defined again with another relation type 
+            //and relation is not redefine from other side i.e for first->second we are getting second -> first 
+            for (var inneerRelationId in schemaRelations) { // in case of relation there are two tables first table makes relation with second table column
+                var innerFirstTable = schemaRelations[relationId].firstTable;
+                var innerSecondTable = schemaRelations[relationId].secondTable;
+                if(relationId == inneerRelationId){ //if comparing with itself
+                   continue; //skip iteration    
+                }
+                else if(
+                        ( firstTable == innerFirstTable && secondTable == innerSecondTable) || 
+                        (firstTable == innerSecondTable && secondTable == innerFirstTable)
+                       ){
+                  errors += "0: There can only be one relation between two tables, relation between "+ firstTable +" and "+ secondTable+" are defined twice on instance[appSchema].relations["+relationId+"] and instance[appSchema].relations["+inneerRelationId+"]";
+                  return errors; 
+                }                
+            }
         } //end of relations for
-
-          
-          //check if the valid/supported types are used for the columns(commented) because using builtin json scheema option 
-          // for (var columnId in tableColumns) {
-          //   tableColumnType = tableColumns[columnId].type;
-          //   if( 
-          //       !(
-          //         tableColumnType.toLowerCase() == "text" || tableColumnType.toLowerCase() ==  ||
-          //         tableColumnType.toLowerCase() == "text","number","email" || tableColumnType.toLowerCase() ==  ||
-          //         tableColumnType.toLowerCase() == 
-          //        )
-          //     ){
-          //     error += "0: unsupported type: "+tableColumnType+" is used on instance["+objectId+"].columns["+columnId+"]";
-          //     return error;  
-          //   }
-          // }
-
-          // for (var relationId in tableRelations) {
-          //   let relationType = tableRelations[relationId].type;
-          //   if( 
-          //       !(
-          //         relationType.toLowerCase() == "onetomany" || relationType.toLowerCase() == "manytomany" ||
-          //         relationType.toLowerCase() == "select" || relationType.toLowerCase() == "radio" ||
-          //         relationType.toLowerCase() == "checkbox"  || relationType.toLowerCase() == "multiselect"
-          //        )
-          //     ){
-          //     error += "0: unsupported type: "+relationType+" is used on instance["+objectId+"].columns["+relationId+"]";
-          //     return error;  
-          //   }
-          // }         
         return "";            
       }
     }
