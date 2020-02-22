@@ -52,12 +52,12 @@ class CRUDGeneratorService {
       }
 
       if(databaseName){ //if user passed name for its project database  
-        projectDatabaseName = databaseName + "DB";
+        projectDatabaseName = databaseName;
         //also setting values to crudConfig so it will be accessible accross the application
         CRUDConfigurations.ProjectDatabaseName = projectDatabaseName; 
       }
       else if(applicationName){//if user passed name for its project only so use that as DBName 
-        projectDatabaseName = applicationName + "DB";
+        projectDatabaseName = applicationName;
         //also setting values to crudConfig so it will be accessible accross the application
         CRUDConfigurations.ProjectDatabaseName = projectDatabaseName; 
       }
