@@ -18,16 +18,25 @@ The project is a node application that takes json schema as input and generate a
 -   Depending upon the name of **theme** provided the UI of the App changes.
 -   Responsive Design for both Desktop and mobile size displays.
 
+## Node Project Features
+-   For each entity seperate **database models** are created using [Mongoose](https://www.npmjs.com/package/mongoose).
+-   For each entity seperate **API Endpoints** are created i.e all [get, put, post and delete] which are accessible
+    by authenticated users of generated React Project. These endpoints are created using [express](https://www.npmjs.com/package/express). 
+-   For Providing **Authentication System** a User database model and its respective API Endpoints are automatically
+    created. The project uses [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) for token managment.
+-   The project creates respective **database** in MongoDB with a default user which can login.
+-   The project also has [nodemon](https://www.npmjs.com/package/nodemon) which helps developers by automatically  
+    restarting the application when file changes are detected.
 
 # What Projects can be generated?
 1. User can generate a complete MERN CRUD application.This option generate two projects. 
-   - **React Project** which contains create,update Forms and List page with View and delete option along with login, signUp and update user information form. check out [React Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#react-project-features) for details.
-   - **Node project** which contains the database models,Express API endpoints and also creates the database in MongoDB.
-2. User can generate only the Node/Express api CRUD, In this case only one project is generated.  
-   - **Node project** which contains the database models,Express API endpoints and also creates the database in MongoDB.
+   - **React Project** which contains create, update Forms and a List page having View and delete functionality for each entity. The Project also constains login, signUp and update user information form. check out [React Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#react-project-features) for details.
+   - **Node project** which contains the database models,Express API endpoints for each entity and also creates the database in MongoDB check out [Node Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#node-project-features) for details.
+2. User can generate only the Node/Express api CRUD, In this case only node project is generated.  
+   - **Node project** which contains the database models,Express API endpoints for each entity and also creates the database in MongoDB check out [Node Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#node-project-features) for details.
 3. User can generate an empty MERN Application,This option don,t require schema from user and generate two projects. 
    - **React Project** haiving an empty Component along with login, signUp and update user information form.
-   - **Node project** which in this case contains only "User" database model and Express API endpoint and a database in MongoDB.
+   - **Node project** which in this case contains only "User" database model and its Express API endpoints and a database in MongoDB.
 
 # While Creating Schema for CRUD Generator keep these thing in mind
 - The property "appName" is string type and takes the name of your application that will be generated, the property is optional if user don,t pass "sampleApp" will be the name. 
