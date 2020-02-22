@@ -1,15 +1,33 @@
-# Overview
-The project is a node application that takes json schema as input and generate a MERN CRUD Application as output.The generated projects has an easy to read and upadte code and following some great conventions.
+# MERN CRUD Generator
+
+The project is a node application that takes json schema as input and generate a MERN CRUD Application as output.The purpose of creating the project is
+1. To save developers time generating all the four CRUD functionalities for each Entity.
+2. Generate relations between these entities if there are any. 
+3. To provide React, Node and Express developers with an easy to read and update code following good conventions. 
+
+## React Project Features
+-   For each entity seperate React Components are created for Create,View,Update,delete and list page.
+-   For each entity seperate **service** is created for get, put, post and delete calls to the Node Project the
+    services uses [axios](https://www.npmjs.com/package/axios) for this purpose.
+-   Each Form element/input will have **client side validation** applied using [JOI](https://www.npmjs.com/package/joi) depending upon type of the element that user provides.
+-   List Page avoid lengthy pages by providing **pagination**. 
+-   Provides **Authentication System** containing 5 functionalties 
+    login, logout, register, update password and user inforamtion using their forms.
+-   The Navbar will have the name of all the Entities user provided for easy **navigation** b/w all these CRUD's. 
+    We used [react-router-dom](https://www.npmjs.com/package/react-router-dom) for ease.
+-   Depending upon the name of **theme** provided the UI of the App changes.
+-   Responsive Design for both Desktop and mobile size displays.
+
 
 # What Projects can be generated?
 1. User can generate a complete MERN CRUD application.This option generate two projects. 
-   - REACT application which contains create,update Forms and List page with View and delete option along with login, signUp and update user information form.
-   - Node project which contains the database models,Express API endpoints and also creates the database in MongoDB.
+   - **React Project** which contains create,update Forms and List page with View and delete option along with login, signUp and update user information form. check out [React Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#react-project-features) for details.
+   - **Node project** which contains the database models,Express API endpoints and also creates the database in MongoDB.
 2. User can generate only the Node/Express api CRUD, In this case only one project is generated.  
-   - Node project which contains the database models,Express API endpoints and also creates the database in MongoDB.
+   - **Node project** which contains the database models,Express API endpoints and also creates the database in MongoDB.
 3. User can generate an empty MERN Application,This option don,t require schema from user and generate two projects. 
-   - REACT application haiving an empty Component along with login, signUp and update user information form.
-   - Node project which in this case contains only "User" database model and Express API endpoint and a database in MongoDB.
+   - **React Project** haiving an empty Component along with login, signUp and update user information form.
+   - **Node project** which in this case contains only "User" database model and Express API endpoint and a database in MongoDB.
 
 # While Creating Schema for CRUD Generator keep these thing in mind
 - The property "appName" is string type and takes the name of your application that will be generated, the property is optional if user don,t pass "sampleApp" will be the name. 
