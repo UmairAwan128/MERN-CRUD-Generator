@@ -20,18 +20,21 @@ The project is a node application that takes json schema as input and generate a
 
 | property name      | type        | info                                                                      |            | default value | 
 | ------------------ | ----------- | ------------------------------------------------------------------------- | ---------- | ------------- |
+
 | **appName**        | **string**  | Its value will be the name of application that will be generated.         | optional   | `sampleApp`   |
-| **appTheme**       | **enum**    | Its value can be `dark`, `defaultLight`, `electricBlue` and is used to    | optional   | `defaultLight`| |                    |             | decide the theme for the generated react application.                     |            |               |
-| **appDbName**      | **string**  | Its value will be the name of the database that will be created for       | optional   | `sampleDB`    |  
-|                    |             | the generated application.                                                |            |               |
+
+| **appTheme**       | **enum**    | Its value can be `dark`, `defaultLight`, `electricBlue` and is used to decide the theme for the generated react application. | optional   | `defaultLight`| 
+
+| **appDbName**      | **string**  | Its value will be the name of the database that will be created for  the generated application. | optional   | `sampleDB`    |  
+
 | **appSchema**      | **object**  | It has two arrays representing the app to generate `tables`,`relations`.  | required   |               |
-| **tables**         | **array**   | It contains a collection of objects each representing an entity to        | required   |               | 
-|                    |             | generate and each contains two properties `name` and `columns` to define  |            |               |
-|                    |             | the structure of entity.                                                  |            |               |
-| `tables`**name**   | **string**  | Its value will be the name of the entity but there is a restrication      | required   |               |  
-|                    |             | that first letter should be capital.                                      |            |               |
-| `.`**columns**     | **array**   | It contains a collection of objects each representing a property of the   | required   |               | 
-|                    |             | specific entity. It has three properties `name`, `type` and `required`.   |            |               |
+
+| **tables**         | **array**   | It contains a collection of objects each representing an entity to generate and each contains two properties `name` and `columns` to define the structure of entity. | required   |               | 
+
+| `tables`**name**   | **string**  | Its value will be the name of the entity but there is a restrication that first letter should be capital. | required   |               |  
+
+| `.`**columns**     | **array**   | It contains a collection of objects each representing a property of the specific entity. It has three properties `name`, `type` and `required`.  | required   |               | 
+
 1. The first array is the "tables" which contains a collection of objects each representing a table.
    Each object has 
    - "name" property telling the name of the table, this property is required and its type is string and there is a restrication that first letter should be capital.
