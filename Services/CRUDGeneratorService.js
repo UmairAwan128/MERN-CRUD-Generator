@@ -340,17 +340,19 @@ class CRUDGeneratorService {
             //check if a relation is not defined again with another relation type 
             //and relation is not redefine from other side i.e for first->second we are getting second -> first 
             for (var inneerRelationId in schemaRelations) { // in case of relation there are two tables first table makes relation with second table column
-                var innerFirstTable = schemaRelations[relationId].firstTable;
-                var innerSecondTable = schemaRelations[relationId].secondTable;
+                var innerFirstTable = schemaRelations[inneerRelationId].firstTable;
+                var innerSecondTable = schemaRelations[inneerRelationId].secondTable;
+
                 if(relationId == inneerRelationId){ //if comparing with itself
                    continue; //skip iteration    
-                }
+                  }
                 else if(
                         ( firstTable == innerFirstTable && secondTable == innerSecondTable) || 
                         (firstTable == innerSecondTable && secondTable == innerFirstTable)
-                       ){
-                  errors += "0: There can only be one relation between two tables, relation between "+ firstTable +" and "+ secondTable+" are defined twice on instance[appSchema].relations["+relationId+"] and instance[appSchema].relations["+inneerRelationId+"]";
-                  return errors; 
+                       )
+                {
+                    errors += "0: There can only be one relation between two tables, relation between "+ firstTable +" and "+ secondTable+" are defined twice on instance[appSchema].relations["+relationId+"] and instance[appSchema].relations["+inneerRelationId+"]";
+                    return errors; 
                 }                
             }
         } //end of relations for

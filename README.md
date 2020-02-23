@@ -18,32 +18,37 @@ The project is a node application that takes json schema as input and generate a
 
 ## Creating Schema for CRUD Generator input
 
-| property name | type        | info                                                                             |            | default value | 
-| --------------| ----------- | -------------------------------------------------------------------------------- | ---------- | ------------- |
-| **appName**   | **string**  | Its value will be used as the name of application generated.                     | optional   | `sampleApp`   |
-| **appTheme**  | **enum**    | Its value  is used to decide the theme of the generated React application.       | optional   | `defaultLight`| 
-|               |             | Its value can be `dark`, `defaultLight`, `electricBlue`.                         |            |               |
-| **appDbName** | **string**  | Its value will be used as the name of the database created for generated project.| optional   | `sampleDB`    | 
-|               |             | If its not passed but `appName` is passed then DB name will also be its value.   |            |               |
-| **appSchema** | **object**  | It has two arrays representing the app to generate `tables`,`relations`.         | required   |               |
-| **tables**    | **array**   | It contains a collection of objects each representing an entity.                 | required   |               | 
-|               |             | Each contains two properties `name` and `columns` representing its structure.    |            |               |
-|  **name**     | **string**  | Its value will be the name of the entity but there is a restrication that        | required   |               | 
-|               |             | the first letter of the string should be capital.                                |            |               |
-|  **columns**  | **array**   | It contains a collection of objects each representing a property of an entity.   | required   |               | 
-|               |             | It has three properties `name`, `type` and `required`.                           |            |               |
-
-1. The first array is the "tables" which contains a collection of objects each representing a table.
-   Each object has 
-   - "name" property telling the name of the table, this property is required and its type is string and there is a restrication that first letter should be capital.
-   - "columns" is of type array each column has three properties.
-      1. "name" property is of type string and is required property.
-      2. "type" property is of type enum and currently supports the folllowing types "text","number","email","password","date" and is a required property.
-      3. "required" is of type boolean it tells either the column is rquired or not and is optional property. 
-2. The second array is the "relations" which contains a collection of object, each representing a relation between two tables, each relation object has 4 properties and all are required.
-   - Both "firstTable" and "secondTable" properties are of type string and are required property
-   - The property "relationType" is of type enum and allows the following set of values "select", "radio", "checkBox","multiselect","oneToMany","manyToMany".
-   - The property "secondTableColumn" is also of type string and only allows the name of any column from the table you mentioned in "secondTable" property.    
+| property name   | type       | info                                                                             |            | default value  
+| ----------------| ---------- | -------------------------------------------------------------------------------- | ---------- | ------------- |
+|**appName**      | **string** | Its value will be used as the name of application generated.                     | optional   | `sampleApp`   |
+|**appTheme**     | **enum**   | Its value  is used to decide the theme of the generated React application.       | optional   | `defaultLight`|
+|                 |            | Its value can be `dark`, `defaultLight`, `electricBlue`.                         |            |               |
+|**appDbName**    | **string** | Its value will be used as the name of the database created for generated project.| optional   | `sampleDB`    |
+|                 |            | If its not passed but `appName` is passed then DB name will also be its value.   |            |               |
+|**appSchema**    | **object** | It has two arrays representing the app to generate `tables`,`relations`.         | required   |               |
+| **tables**      | **array**  | It contains a collection of objects each representing an entity.                 | required   |               |
+|                 |            | Each contains two properties `name` and `columns` representing its structure.    |            |               |
+|  **name**       | **string** | Its value will be the name of the entity but there is a restrication that,       | required   |               |
+|                 |            | the first letter of the string should be capital.                                |            |               |
+|  **columns**    | **array**  | It contains a collection of objects each representing a property of an entity.   | required   |               |
+|                 |            | It has three properties `name`, `type` and `required`.                           |            |               |
+|   **name**      | **string** | It is the name property of columns array the first one was name for the entity.  | required   |               |
+|                 |            | Its value will be used as name of the specific property of entity.               |            |               |
+|   **type**      | **enum**   | Its value will be used as the type of the specific property of entity.           | required   |               |
+|                 |            | Its value can be either `text`,`number`,`email`,`password`,`date`.               |            |               |
+|   **required**  |**boolean** | Its value will be used to tell either the specific property of entity is required| optional   | `false`       |
+|                 |            | Its value can be either `true`,`false`.                                          |            |               |
+| **relations**   | **array**  | It contains a collection of objects each representing a relation b/w two entities| optional   |               |
+|                 |            | It has three properties `firstTable`, `secondTable` and `secondTableColumn`.     |            |               |
+|**firstTable**   | **string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
+|**secondTable**  | **string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
+|                 |            | so the relation will be created b/w `firstTable` and `secondTable`.              |            |               |
+|**relationType** | **enum**   | Its value will be used to tell the type of the relation b/w the two entities,    | required   |               |
+|                 |            | we defined  in `firstTable` and `secondTable`. Its value can be either           |            |               |
+|                 |            | "select", "radio", "checkBox","multiselect","oneToMany","manyToMany".            |            |               |
+|                 |            | for details regarding each type checkout [Realtions Supported](https://github.com/UmairAwan128/MERN-CRUD-Generator#node-project-features).            |            |               |
+|secondTableColumn| **string** | Its value should be same as `name` property value from `columns` array of the    | required   |               |
+|                 |            | respective entity mentioned in `secondTable`.                                    |            |               |
 
 
 ## React Project Features
