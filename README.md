@@ -17,38 +17,62 @@ The project is a node application that takes json schema as input and generate a
    - **Node project** which in this case contains only "User" database model and its Express API endpoints and a database in MongoDB.
 
 ## Creating Schema for CRUD Generator input
+   To successfully generate a MERN CRUD Application the only thing you need is to create a JSON file having the following set of properties. Every thing you need to know about these properties is defined in following table.
 
-| property name   | type       | info                                                                             |            | default value  
-| ----------------| ---------- | -------------------------------------------------------------------------------- | ---------- | ------------- |
-|**appName**      | **string** | Its value will be used as the name of application generated.                     | optional   | `sampleApp`   |
-|**appTheme**     | **enum**   | Its value  is used to decide the theme of the generated React application.       | optional   | `defaultLight`|
-|                 |            | Its value can be `dark`, `defaultLight`, `electricBlue`.                         |            |               |
-|**appDbName**    | **string** | Its value will be used as the name of the database created for generated project.| optional   | `sampleDB`    |
-|                 |            | If its not passed but `appName` is passed then DB name will also be its value.   |            |               |
-|**appSchema**    | **object** | It has two arrays representing the app to generate `tables`,`relations`.         | required   |               |
-| **tables**      | **array**  | It contains a collection of objects each representing an entity.                 | required   |               |
-|                 |            | Each contains two properties `name` and `columns` representing its structure.    |            |               |
-|  **name**       | **string** | Its value will be the name of the entity but there is a restrication that,       | required   |               |
-|                 |            | the first letter of the string should be capital.                                |            |               |
-|  **columns**    | **array**  | It contains a collection of objects each representing a property of an entity.   | required   |               |
-|                 |            | It has three properties `name`, `type` and `required`.                           |            |               |
-|   **name**      | **string** | It is the name property of columns array the first one was name for the entity.  | required   |               |
-|                 |            | Its value will be used as name of the specific property of entity.               |            |               |
-|   **type**      | **enum**   | Its value will be used as the type of the specific property of entity.           | required   |               |
-|                 |            | Its value can be either `text`,`number`,`email`,`password`,`date`.               |            |               |
-|   **required**  |**boolean** | Its value will be used to tell either the specific property of entity is required| optional   | `false`       |
-|                 |            | Its value can be either `true`,`false`.                                          |            |               |
-| **relations**   | **array**  | It contains a collection of objects each representing a relation b/w two entities| optional   |               |
-|                 |            | It has three properties `firstTable`, `secondTable` and `secondTableColumn`.     |            |               |
-|**firstTable**   | **string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
-|**secondTable**  | **string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
-|                 |            | so the relation will be created b/w `firstTable` and `secondTable`.              |            |               |
-|**relationType** | **enum**   | Its value will be used to tell the type of the relation b/w the two entities,    | required   |               |
-|                 |            | we defined  in `firstTable` and `secondTable`. Its value can be either           |            |               |
-|                 |            | "select", "radio", "checkBox","multiselect","oneToMany","manyToMany".            |            |               |
-|                 |            | for details regarding each type checkout [Realtions Supported](https://github.com/UmairAwan128/MERN-CRUD-Generator#node-project-features).            |            |               |
-|secondTableColumn| **string** | Its value should be same as `name` property value from `columns` array of the    | required   |               |
-|                 |            | respective entity mentioned in `secondTable`.                                    |            |               |
+| property name   | type      | info                                                                             |            | default value  
+| --------------- | --------- | -------------------------------------------------------------------------------- | ---------- | ------------- |
+|**appName**      |**string** | Its value will be used as the name of application generated.                     | optional   | `sampleApp`   |
+|**appTheme**     | **enum**  | Its value  is used to decide the theme of the generated React application.       | optional   | `defaultLight`|
+|                 |           | Its value can be `dark`, `defaultLight`, `electricBlue`.                         |            |               |
+|**appDbName**    |**string** | Its value will be used as the name of the database created for generated project.| optional   | `sampleDB`    |
+|                 |           | If its not passed but `appName` is passed then DB name will also be its value.   |            |               |
+|**appSchema**    |**object** | It has two arrays representing the app to generate `tables`,`relations`.         | required   |               |
+| **tables**      | **array** | It contains a collection of objects each representing an entity.                 | required   |               |
+|                 |           | Each contains two properties `name` and `columns` representing its structure.    |            |               |
+|  **name**       |**string** | Its value will be the name of the entity but there is a restrication that,       | required   |               |
+|                 |           | the first letter of the string should be capital.                                |            |               |
+|  **columns**    |**array**  | It contains a collection of objects each representing a property of an entity.   | required   |               |
+|                 |           | It has three properties `name`, `type` and `required`.                           |            |               |
+|   **name**      |**string** | It is the name property of columns array the first one was name for the entity.  | required   |               |
+|                 |           | Its value will be used as name of the specific property of entity.               |            |               |
+|   **type**      | **enum**  | Its value will be used as the type of the specific property of entity.           | required   |               |
+|                 |           | Its value can be either `text`,`number`,`email`,`password`,`date`.               |            |               |
+|   **required**  |**boolean**| Its value will be used to tell either the specific property of entity is required| optional   | `false`       |
+|                 |           | Its value can be either `true`,`false`.                                          |            |               |
+| **relations**   |**array**  | It contains a collection of objects each representing a relation b/w two entities| optional   |               |
+|                 |           | It has four properties,                                                          |            |               |
+|                 |           | `firstTable`, `secondTable`, `relationType`, `secondTableColumn`.                |            |               |
+|**firstTable**   |**string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
+|**secondTable**  |**string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
+|                 |           | so the relation will be created b/w `firstTable` and `secondTable`.              |            |               |
+|**relationType** | **enum**  | Its value will be used to tell the type of the relation b/w the two entities,    | required   |               |
+|                 |           | we defined  in `firstTable` and `secondTable`. Its value can be either           |            |               |
+|                 |           | `select`, `radio`, `checkBox`,`multiselect`,`oneToMany`,`manyToMany`.            |            |               |
+|                 |           | for details regarding each type checkout [Realtions Supported](https://github.com/UmairAwan128/relations-between-entities).            |            |               |
+|secondTableColumn|**string** | Its value should be same as `name` property value from `columns` array of the    | required   |               |
+|                 |           | respective entity mentioned in `secondTable`, [Where its used?](https://github.com/UmairAwan128/relations-between-entities).  |            |               |
+
+## Relations Between Entities
+A realtion b/w two entities is created using 4 properties `firstTable`, `secondTable`, `relationType`, `secondTableColumn`, to understand how a relation is created lets take an example say we have two entities `product` and `category` and we want to create a relation of type `select` 
+between them.
+ - The `product` has two properties `prodName` and `price`.
+ - The `category` has two properties `catName` and `type`.
+If a relation object has these values `firstTable`="product", `secondTable`="category", `relationType`="select", `secondTableColumn`="catName".
+This means in the `product` create form there will be a `category` select/dropdown and that dropdown will have the data of the `catName` property of the `category` entity.
+
+<img src="images/prodSelectShow.png" width="800">
+<img src="images/catList.png" width="800">
+
+Currently CRUD Generator supports the following relation types.
+
+| relationType    |  info                                                                               |
+| --------------- | ----------------------------------------------------------------------------------- |
+| **select**      | creates a select/dropdown representing a one to many relation b/w the entities      |
+| **radio**       | creates a radio buttons representing a one to many relation b/w the entities        |
+| **checkBox**    | creates checkboxes representing a many to many relation b/w the entities            |
+| **multiselect** | creates a multiSelect/dropdown representing a many to many relation b/w the entities|
+| **oneToMany**   | creates a select/dropdown representing                                              |
+| **manyToMany**  | creates a multiSelect/dropdown representing                                         | 
 
 
 ## React Project Features
@@ -75,3 +99,5 @@ The project is a node application that takes json schema as input and generate a
 -   The project creates respective **database** in MongoDB with a default user which can login.
 -   The project also has [nodemon](https://www.npmjs.com/package/nodemon) which helps developers by automatically  
     restarting the application when file changes are detected.
+
+## Sample Scheema File
