@@ -44,13 +44,14 @@ The project is a node application that takes json schema as input and generate a
 |                 |           | `firstTable`, `secondTable`, `relationType`, `secondTableColumn`.                |            |               |
 |**firstTable**   |**string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
 |**secondTable**  |**string** | Its value should be same as `name` of any entity we defined in `tables` property | required   |               |
-|                 |           | so the relation will be created b/w `firstTable` and `secondTable`.              |            |               |
+|                 |           | or it can also be `User` which is a builtin entity that is automatically created.|            |               |
+|                 |           | so relation will be created b/w entities mentioned in firstTable and secondTable.|            |               |
 |**relationType** | **enum**  | Its value will be used to tell the type of the relation b/w the two entities,    | required   |               |
 |                 |           | we defined  in `firstTable` and `secondTable`. Its value can be either           |            |               |
 |                 |           | `select`, `radio`, `checkBox`,`multiselect`,`oneToMany`,`manyToMany`.            |            |               |
-|                 |           | for details regarding each type checkout [Realtions Supported](https://github.com/UmairAwan128/relations-between-entities).            |            |               |
+|                 |           | for details regarding each type checkout [Realtions Supported](https://github.com/UmairAwan128/MERN-CRUD-Generator#relations-between-entities).            |            |               |
 |secondTableColumn|**string** | Its value should be same as `name` property value from `columns` array of the    | required   |               |
-|                 |           | respective entity mentioned in `secondTable`, [Where its used?](https://github.com/UmairAwan128/relations-between-entities).  |            |               |
+|                 |           | respective entity mentioned in `secondTable`, [Where its used?](https://github.com/UmairAwan128/MERN-CRUD-Generator#relation-types-supported).  |            |               |
 
 ## Relations Between Entities
 A realtion b/w two entities is created using 4 properties `firstTable`, `secondTable`, `relationType`, `secondTableColumn`, to understand how a relation is created lets take an example say we have two entities `product` and `category` and we want to create a relation of type `select` 
@@ -60,9 +61,10 @@ between them.
 If a relation object has these values `firstTable`="product", `secondTable`="category", `relationType`="select", `secondTableColumn`="catName".
 This means in the `product` create form there will be a `category` select/dropdown and that dropdown will have the data of the `catName` property of the `category` entity.
 
-      <img src="images/prodSelectShow.png" width="360">
-      <img src="images/catList.png" hspace="20" width="360">
+<img src="images/prodSelectShow.png" width="800">
+<img src="images/catList.png" width="800">
 
+## Relation Types Supported
 Currently CRUD Generator supports the following relation types.
 
 | relationType    |  info                                                                               |
@@ -101,3 +103,147 @@ Currently CRUD Generator supports the following relation types.
     restarting the application when file changes are detected.
 
 ## Sample Scheema File
+   The following is a sample schema for an Ecommerace Application and it uses all datatypes,relations and fearures supported.
+```json
+{
+    "appName": "Ecomerace",
+    "appTheme": "dark",
+    "appDbName": "EcomeraceDb",
+    "appSchema": {
+        "tables": [
+            {
+                "name": "Product",
+                "columns": [
+                    {
+                        "name": "ProdName",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Price",
+                        "type": "number",
+                        "required": true
+                    }
+                    
+                ]
+            },
+            {
+                "name": "Category",
+                "columns": [
+                    {
+                        "name": "CatName",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "text",
+                        "required": false
+                    }
+                ]
+            },
+            {
+                "name": "Order",
+                "columns": [
+                    {
+                        "name": "OrderName",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "OrderDate",
+                        "type": "date",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Status",
+                "columns": [
+                    {
+                        "name": "StatName",
+                        "type": "text",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Customer",
+                "columns": [
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Email",
+                        "type": "email"
+                    },
+                    {
+                        "name": "Password",
+                        "type": "password"
+                    },
+                    {
+                        "name": "Phone",
+                        "type": "number",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Suplier",
+                "columns": [
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Phone",
+                        "type": "number",
+                        "required": true
+                    }
+                ]
+            }
+        ],
+        "relations": [
+            {
+                "firstTable": "Product",
+                "secondTable": "Category",
+                "relationType": "oneToMany",
+                "secondTableColumn": "CatName"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "User",
+                "relationType": "select",
+                "secondTableColumn": "email"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "Status",
+                "relationType": "radio",
+                "secondTableColumn": "StatName"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "Product",
+                "relationType": "checkBox",
+                "secondTableColumn": "ProdName"
+            },
+            {
+                "firstTable": "Customer",
+                "secondTable": "Order",
+                "relationType": "manyToMany",
+                "secondTableColumn": "OrderName"
+            },
+            {
+                "firstTable": "Suplier",
+                "secondTable": "Product",
+                "relationType": "multiselect",
+                "secondTableColumn": "ProdName"
+            }
+        ]
+    }
+}
+```
