@@ -60,8 +60,14 @@ between them.
 If a relation object has these values `firstTable`="product", `secondTable`="category", `relationType`="select", `secondTableColumn`="catName".
 This means in the `product` create form there will be a `category` select/dropdown and that dropdown will have the data of the `catName` property of the `category` entity.
 
-<img src="images/prodSelectShow.png" width="800">
-<img src="images/catList.png" width="800">
+<div class="row">
+   <div class="column">
+      <img src="images/prodSelectShow.png" width="400">
+   </div>
+   <div class="column">
+      <img src="images/catList.png" hspace="20" width="400">
+   </div>
+</div>   
 
 Currently CRUD Generator supports the following relation types.
 
