@@ -62,10 +62,10 @@ This means in the `product` create form there will be a `category` select/dropdo
 
 <div class="row">
    <div class="column">
-      <img src="images/prodSelectShow.png" width="400">
+      <img src="images/prodSelectShow.png" width="360">
    </div>
    <div class="column">
-      <img src="images/catList.png" hspace="20" width="400">
+      <img src="images/catList.png" hspace="20" width="360">
    </div>
 </div>   
 
