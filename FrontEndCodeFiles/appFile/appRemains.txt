@@ -3,7 +3,9 @@
             <Redirect to="/not-found" />
           </Switch>
         </main>
-
+        <div className="footer footer-copyright text-center py-3">© 2020 Generated with:
+          <a href="https://mdbootstrap.com/education/bootstrap/"> MERN CRUD Generator </a>
+        </div>
       </React.Fragment>
     );
   }

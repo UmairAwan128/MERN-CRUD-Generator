@@ -6,12 +6,14 @@ var configurations = {
     ProjectFolderName: "sampleApp",
     ReactProjectFolderName: "sampleReactApp",
     NodeProjectFolderName: "sampleNodeApp",
+    ProjectAppName: "sample",
     ProjectDatabaseName: "sampleDB",
     ProjectThemeName: "defaultLight",
 
     DefaultProjectFolderName: "sampleApp",
     DefaultReactProjectFolderName: "sampleReactApp",
     DefaultNodeProjectFolderName: "sampleNodeApp",
+    DefaultProjectAppName: "sample",
     DefaultProjectDatabaseName: "sampleDB",
     DefaultProjectThemeName: "defaultLight",
 

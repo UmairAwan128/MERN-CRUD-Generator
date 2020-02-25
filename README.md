@@ -61,8 +61,8 @@ between them.
 If a relation object has these values `firstTable`="product", `secondTable`="category", `relationType`="select", `secondTableColumn`="catName".
 This means in the `product` create form there will be a `category` select/dropdown and that dropdown will have the data of the `catName` property of the `category` entity.
 
-<img src="images/prodSelectShow.png" width="800">
-<img src="images/catList.png" width="800">
+ <img src="images/prodSelectShow.png" width="360">
+ <img src="images/catList.png" hspace="20" width="360">
 
 ## Relation Types Supported
 Currently CRUD Generator supports the following relation types.
@@ -102,7 +102,20 @@ Currently CRUD Generator supports the following relation types.
 -   The project also has [nodemon](https://www.npmjs.com/package/nodemon) which helps developers by automatically  
     restarting the application when file changes are detected.
 
+## Dealing with Errors
+
+To generate your CRUD app the only thing you need is a json schema file in a specific format but if the provided schema file has not valid format or schema does not follow the rules then on runtime all those errors are wrote to a file named **errors.txt** and this file will be placed where you wanted your CRUD app to be generated. So here we have disscussed about some of the most common errors and these errors are explained in such a way that they will help you in understanding any other errors that may generate.
+-  `instance.appTheme is not one of enum values: dark,defaultLight,electricBlue`, here `instance.appTheme` means first `instance` means your schema file and `appTheme` is the property of schema, and the complete error statement is telling that the appTheme is an enum type property and allows only following set of value use any of these `dark,defaultLight,electricBlue`.
+-  `instance.appSchema.tables[2].name does not match pattern "^[A-Z][a-zA-Z]*$"`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `tables` array
+and `tables[2].name` means on the second object of tables array there is a `name` property which has the error, the error is telling that `name` property value should be a string whose first letter should be capital.
+-  `instance.appSchema.tables[5].columns[1].required is not of a type(s) boolean`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `tables` array
+and `tables[5].columns[1].required` means on the fifth object of tables array there is a `columns` array whose first index has the `required` property which has the error, the error is telling that `required` property supports type `boolean` and its value can be either `true` or `false`. 
+-  `invalid table name used on firstTable of instance.appSchema.relations[3], please specify name of table that you provided in scheema`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `firstTable of relations[3]` means on the third object of relations array there is a `firstTable` property which has the error, the error is telling that `firstTable` property value should be same as the `name` property of any of the `tables` array object of respective schema.
+-  `There can only be one relation between two tables, relation between Order and Product are defined twice on instance.appSchema.relations[3] and instance.appSchema.relations[4]` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `relations[n]` means a specific object of relations array and the error statement is telling that two relation object have same `firstTable` and `secondTable` value but have different `relationType` property value means you are trying to create multiple relations b/w two entities and it is not possible remove any of them to resole error.
+-  `invalid column name used in secondTableColumn on instance.appSchema.relations[3], please specify name of column that exist in Product scheema.`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `firstTable of relations[3]` means on the third object of relations array there is a `secondTableColumn` property which has the error, the error is telling that `secondTableColumn` property value should be same as the `name` property of any of the `columns` array object of respective table you mentioned in the `secondTable` property. 
+
 ## Sample Scheema File
+
    The following is a sample schema for an Ecommerace Application and it uses all datatypes,relations and fearures supported.
 ```json
 {

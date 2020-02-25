@@ -17,6 +17,7 @@ class navbarCodeService {
 
   GetNavbarFileCode(schemaTables) {
     var navbarFileCode = this.getImportsAndReturn(); //imports
+    navbarFileCode += this.getReturnRemains();
     navbarFileCode += this.getSpecficNavLinks(schemaTables); // all close braces and exports
     navbarFileCode += this.getNavbarFileRemains();
     return navbarFileCode;
@@ -24,6 +25,15 @@ class navbarCodeService {
 
   getImportsAndReturn() {
     var filePath = navbarFilesFolderPath + "/navbarImportsAndReturn.txt";
+    var code = fs.readFileSync(path.resolve(filePath), "utf8");
+    code += '\n      <Link className="navbar-brand custom-navbar-brand" to="/">\n';
+    code += '        ' + CRUDConfigurations.ProjectAppName+'\n';
+    code += '      </Link>\n';
+    return code;
+  }
+
+  getReturnRemains() {
+    var filePath = navbarFilesFolderPath + "/navbarReturnRemains.txt";
     var code = fs.readFileSync(path.resolve(filePath), "utf8");
     return code;
   }

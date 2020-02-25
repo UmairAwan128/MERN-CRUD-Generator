@@ -7,15 +7,3 @@ const Navbar = ({ user }) => {
       style={{ marginBottom: 10 }}
       className="navbar navbar-expand-lg navbar-light bg-light  custom-navbar"
     >
-      <Link className="navbar-brand custom-navbar-brand" to="/">
-        Sample React App
-      </Link>
-    
-      
-      <button className="navbar-toggler  custom-navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"></span>
-      </button>
-
-      <div className="collapse navbar-collapse" id="navbarText">
-      <ul className="navbar-nav mr-auto">
-

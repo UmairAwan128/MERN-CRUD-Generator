@@ -29,15 +29,17 @@ class CRUDGeneratorService {
       const applicationName = scheema["appName"] ? scheema["appName"] : "";
       const applicationTheme = scheema["appTheme"] ? scheema["appTheme"] : "";
       let outputFolderName = "AppGenerated"; 
-      let projectFolderName, ReactProjectFolderName, NodeProjectFolderName, projectDatabaseName;
+      let appName, projectFolderName, ReactProjectFolderName, NodeProjectFolderName, projectDatabaseName;
 
       if(applicationName){ //if user passed name for its application  
         projectFolderName = applicationName; //+ "App";
+        appName = applicationName;
         ReactProjectFolderName = applicationName + "ReactApp";
         NodeProjectFolderName = applicationName + "NodeApp";
 
         //also setting values to crudConfig so it will be accessible accross the application
         CRUDConfigurations.ProjectFolderName = projectFolderName;
+        CRUDConfigurations.ProjectAppName = appName;
         CRUDConfigurations.ReactProjectFolderName = ReactProjectFolderName;
         CRUDConfigurations.NodeProjectFolderName = NodeProjectFolderName;  
       }
@@ -47,6 +49,7 @@ class CRUDGeneratorService {
         NodeProjectFolderName = CRUDConfigurations.DefaultNodeProjectFolderName;  
         //and set them to crudConfig so it will be accessible accross the application
         CRUDConfigurations.ProjectFolderName = CRUDConfigurations.DefaultProjectFolderName;
+        CRUDConfigurations.ProjectAppName = CRUDConfigurations.DefaultProjectAppName;
         CRUDConfigurations.ReactProjectFolderName = CRUDConfigurations.DefaultReactProjectFolderName;
         CRUDConfigurations.NodeProjectFolderName = CRUDConfigurations.DefaultNodeProjectFolderName; 
       }
@@ -97,13 +100,12 @@ class CRUDGeneratorService {
               ReactProjectFolderCompName
             );
           }
-          
           return isCodeGenerated;
-      } 
-      catch (e) {
+        } 
+        catch (e) {
           console.log(e);
           return false;
-      }
+        }
     }
 
     showScheema(scheema) {
@@ -272,12 +274,12 @@ class CRUDGeneratorService {
             var firstTableFound=false, secondTableFound=false, secondTableColumnFound=false;
 
             if( firstTable == secondTable){ //if user try to make a table relation with itself
-              errors += "0: A table cannot have relation with it self please use different table names on instance[appSchema].relations["+relationId+"].";
+              errors += "0: A table cannot have relation with it self please use different table names on instance.appSchema.relations["+relationId+"].";
               return errors;
             }
             
             if( firstTable.toLowerCase() == "user"){ //user table cannot make relation with anyother table
-              errors += '0: "'+ firstTable +'" table cannot be used as firstTable or cannot make relation with other tables, please use any other table.';
+              errors += '0: "'+ firstTable +'table cannot be used as firstTable or cannot make relation with other tables  on instance.appSchema.relations['+relationId+'], please use any other table.';
               return errors;   
             }    
   
@@ -302,7 +304,7 @@ class CRUDGeneratorService {
                   }
 
                   if(!secondTableColumnFound){ //so column name is invalid
-                      errors += "0: invalid column name used in secondTableColumn on instance[appSchema].relations["+relationId+"], please specify name of column that exist in "+secondTable+" scheema.";
+                      errors += "0: invalid column name used in secondTableColumn on instance.appSchema.relations["+relationId+"], please specify name of column that exist in "+secondTable+" scheema.";
                       return errors;
                   }
 
@@ -316,7 +318,7 @@ class CRUDGeneratorService {
                       secondTableColumn == "password"
                     )
                 ){
-                  errors += "0: invalid column name used in secondTableColumn on instance[appSchema].relations["+relationId+"], "+secondTableColumn+" table only has name,email,password fields so use any of these.";
+                  errors += "0: invalid column name used in secondTableColumn on instance.appSchema.relations["+relationId+"], "+secondTableColumn+" table only has name,email,password fields so use any of these.";
                   return errors;
                 }
                 secondTableColumnFound = true;            
@@ -325,15 +327,15 @@ class CRUDGeneratorService {
             }//end of tables for  
         
             if(!firstTableFound){ // firstTable not found
-              errors += "0: invalid table name used on firstTable of instance[appSchema].relations["+relationId+"], please specify name of table that you provided in scheema.";
+              errors += "0: invalid table name used on firstTable of instance.appSchema.relations["+relationId+"], please specify name of table that you provided in scheema.";
               return errors;
             }
             if(!secondTableFound){ // secondTable not found
-              errors += "0: invalid table name used on secondTable of instance[appSchema].relations["+relationId+"], please specify name of table that you provided in scheema.";
+              errors += "0: invalid table name used on secondTable of instance.appSchema.relations["+relationId+"], please specify name of table that you provided in scheema.";
               return errors;
             }
             if(!secondTableColumnFound){ // secondTable column not found
-              errors += "0: invalid column name used on secondTableColumn of instance[appSchema].relations["+relationId+"], please specify name of column that exist in "+secondTable+".";
+              errors += "0: invalid column name used on secondTableColumn of instance.appSchema.relations["+relationId+"], please specify name of column that exist in "+secondTable+".";
               return errors;
             }
 
@@ -351,7 +353,7 @@ class CRUDGeneratorService {
                         (firstTable == innerSecondTable && secondTable == innerFirstTable)
                        )
                 {
-                    errors += "0: There can only be one relation between two tables, relation between "+ firstTable +" and "+ secondTable+" are defined twice on instance[appSchema].relations["+relationId+"] and instance[appSchema].relations["+inneerRelationId+"]";
+                    errors += "0: There can only be one relation between two tables, relation between "+ firstTable +" and "+ secondTable+" are defined twice on instance.appSchema.relations["+relationId+"] and instance.appSchema.relations["+inneerRelationId+"]";
                     return errors; 
                 }                
             }

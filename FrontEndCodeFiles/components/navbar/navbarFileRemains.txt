@@ -1,9 +1,6 @@
         </ul>
         {!user && (
             <React.Fragment>
-              <span className="nav-item mr-3">
-                Please Login or Register to access your app -->
-              </span>
               <span className="nav-item">
                 <NavLink className="nav-link custom-nav-link" to="/login">
                   Login

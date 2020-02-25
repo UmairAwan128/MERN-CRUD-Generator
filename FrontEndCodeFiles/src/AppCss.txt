@@ -16,6 +16,14 @@
   margin-left: -60px; /* More to the left */
 }
 
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: black;
+  text-align: center;
+}
 
 .App {
   text-align: center;
