@@ -61,7 +61,7 @@ This command shows a list of options asking for the kind of project you want to 
 |                 |           | respective entity mentioned in `secondTable`, [Where its used?](https://www.npmjs.com/package/mern-crud-generator#relation-types-supported).  |            |               |
 
 A complete structure and properties the schema needs is also explained here for quick understanding. 
- <img src="https://raw.githubusercontent.com/UmairAwan128/MERN-CRUD-Generator/master/images/SchemaIllustration.png?token=ANW5SWZVIAJ6VULGO7V2G726KXQ2K" alt="SchemaIllustration.png" >
+ <img src="https://photos.google.com/share/AF1QipNnlkNv1sxFxSb8ab39kzTTtuOud-H9NDV_uua7hMi0E2rseHTHdvPcSWkE7jn-yg/photo/AF1QipMiuvv8uEi7dSC4V8aQgrBwaD_w-B_vV0zZYQvM?key=SVdCYkpNeU5sbVlZTDdGb2pxbHRvb3Fad1RYQVVn" alt="SchemaIllustration.png" >
 
 ## Relations Between Entities
 A realtion b/w two entities is created using 4 properties `firstTable`, `secondTable`, `relationType`, `secondTableColumn`, to understand how a relation is created lets take an example say we have two entities `product` and `category` and we want to create a relation of type `select` 
@@ -71,8 +71,8 @@ between them.
 If a relation object has these values `firstTable`="product", `secondTable`="category", `relationType`="select", `secondTableColumn`="catName".
 This means in the `product` create form there will be a `category` select/dropdown and that dropdown will have the data of the `catName` property of the `category` entity.
 
- <img src="https://raw.githubusercontent.com/UmairAwan128/MERN-CRUD-Generator/master/images/prodSelectShow.png?token=ANW5SWZVIAJ6VULGO7V2G726KXQ2K" width="360" alt="prodSelectShow.png">
- <img src="https://raw.githubusercontent.com/UmairAwan128/MERN-CRUD-Generator/master/images/catList.png?token=ANW5SW3OTBWP3O6QGISDG7K6KXRAA" hspace="20" width="360" alt="catList.png">
+ <img src="https://photos.google.com/share/AF1QipNnlkNv1sxFxSb8ab39kzTTtuOud-H9NDV_uua7hMi0E2rseHTHdvPcSWkE7jn-yg/photo/AF1QipO0ywzEQ__iRRw2GcMxcl6uzaIbmNm5HV_wamcy?key=SVdCYkpNeU5sbVlZTDdGb2pxbHRvb3Fad1RYQVVn" width="360" alt="prodSelectShow.png">
+ <img src="https://photos.google.com/share/AF1QipNnlkNv1sxFxSb8ab39kzTTtuOud-H9NDV_uua7hMi0E2rseHTHdvPcSWkE7jn-yg/photo/AF1QipO-cWIKK-bdKJD2XTE0BrfOZtINmC4gOAGPtqGm?key=SVdCYkpNeU5sbVlZTDdGb2pxbHRvb3Fad1RYQVVn" hspace="20" width="360" alt="catList.png">
 
 ## Relation Types Supported
 Currently CRUD Generator supports the following relation types.
