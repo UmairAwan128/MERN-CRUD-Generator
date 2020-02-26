@@ -1,23 +1,30 @@
 # MERN CRUD Generator
 
-The project is a node application that takes json schema as input and generate a MERN CRUD Application as output.The purpose of creating the project is
+The project is a node application that takes json schema as input and generate a MERN CRUD Application as output. The generated application contains React crud app, Node crud app with Express Api's and corresponding database in mongodb. The purpose of creating the project is
 1. To save developers time generating all the four CRUD functionalities for each Entity.
 2. Generate relations between these entities if there are any. 
 3. To provide React, Node and Express developers with an easy to read and update code following good conventions. 
 
+# Quick Start
+To generate your MERN CRUD App the only thing you need is a json schema file in a specific format, a sample schema  having all the feature used is here [Sample Schema File](https://www.npmjs.com/package/mern-crud-generator#sample-schema-file), you just need to run this command.
+```sh
+npx mern-crud-generator
+```
+This command shows a list of options asking for the kind of project you want to generate each of these is explained here [What Projects can be generated](https://www.npmjs.com/package/mern-crud-generator#what-projects-can-be-generated), you just need to run this command.
+
 ## What Projects can be generated?
 
 1. User can generate a complete MERN CRUD application.This option generate two projects. 
-   - **React Project** which contains create, update Forms and a List page having View and delete functionality for each entity. The Project also constains login, signUp and update user information form. check out [React Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#react-project-features) for details.
-   - **Node project** which contains the database models,Express API endpoints for each entity and also creates the database in MongoDB check out [Node Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#node-project-features) for details.
+   - **React Project** which contains create, update Forms and a List page having View and delete functionality for each entity. The Project also constains login, signUp and update user information form. check out [React Project Features](https://www.npmjs.com/package/mern-crud-generator#react-project-features) for details.
+   - **Node project** which contains the database models,Express API endpoints for each entity and also creates the database in MongoDB check out [Node Project Features](https://www.npmjs.com/package/mern-crud-generator#node-project-features) for details.
 2. User can generate only the Node/Express api CRUD, In this case only node project is generated.  
-   - **Node project** which contains the database models,Express API endpoints for each entity and also creates the database in MongoDB check out [Node Project Features](https://github.com/UmairAwan128/MERN-CRUD-Generator#node-project-features) for details.
+   - **Node project** which contains the database models,Express API endpoints for each entity and also creates the database in MongoDB check out [Node Project Features](https://www.npmjs.com/package/mern-crud-generator#node-project-features) for details.
 3. User can generate an empty MERN Application,This option don,t require schema from user and generate two projects. 
    - **React Project** haiving an empty Component along with login, signUp and update user information form.
    - **Node project** which in this case contains only "User" database model and its Express API endpoints and a database in MongoDB.
 
 ## Creating Schema for CRUD Generator input
-   To successfully generate a MERN CRUD Application the only thing you need is to create a JSON file having the following set of properties. Every thing you need to know about these properties is defined in following table.
+   To successfully generate a MERN CRUD Application the only thing you need is to create a JSON file having the following set of properties. Every thing you need to know about these properties is defined in following table and also an image is below for ease.
 
 | property name   | type      | info                                                                             |            | default value  
 | --------------- | --------- | -------------------------------------------------------------------------------- | ---------- | ------------- |
@@ -49,9 +56,12 @@ The project is a node application that takes json schema as input and generate a
 |**relationType** | **enum**  | Its value will be used to tell the type of the relation b/w the two entities,    | required   |               |
 |                 |           | we defined  in `firstTable` and `secondTable`. Its value can be either           |            |               |
 |                 |           | `select`, `radio`, `checkBox`,`multiselect`,`oneToMany`,`manyToMany`.            |            |               |
-|                 |           | for details regarding each type checkout [Realtions Supported](https://github.com/UmairAwan128/MERN-CRUD-Generator#relations-between-entities).            |            |               |
+|                 |           | for details regarding each type checkout [Realtions Supported](https://www.npmjs.com/package/mern-crud-generator#relations-between-entities).            |            |               |
 |secondTableColumn|**string** | Its value should be same as `name` property value from `columns` array of the    | required   |               |
-|                 |           | respective entity mentioned in `secondTable`, [Where its used?](https://github.com/UmairAwan128/MERN-CRUD-Generator#relation-types-supported).  |            |               |
+|                 |           | respective entity mentioned in `secondTable`, [Where its used?](https://www.npmjs.com/package/mern-crud-generator#relation-types-supported).  |            |               |
+
+A complete structure and properties the schema needs is also explained here for quick understanding. 
+ <img src="https://raw.githubusercontent.com/UmairAwan128/MERN-CRUD-Generator/master/images/SchemaIllustration.png?token=ANW5SWZVIAJ6VULGO7V2G726KXQ2K" alt="SchemaIllustration.png" >
 
 ## Relations Between Entities
 A realtion b/w two entities is created using 4 properties `firstTable`, `secondTable`, `relationType`, `secondTableColumn`, to understand how a relation is created lets take an example say we have two entities `product` and `category` and we want to create a relation of type `select` 
@@ -61,8 +71,8 @@ between them.
 If a relation object has these values `firstTable`="product", `secondTable`="category", `relationType`="select", `secondTableColumn`="catName".
 This means in the `product` create form there will be a `category` select/dropdown and that dropdown will have the data of the `catName` property of the `category` entity.
 
- <img src="images/prodSelectShow.png" width="360">
- <img src="images/catList.png" hspace="20" width="360">
+ <img src="https://raw.githubusercontent.com/UmairAwan128/MERN-CRUD-Generator/master/images/prodSelectShow.png?token=ANW5SWZVIAJ6VULGO7V2G726KXQ2K" width="360" alt="prodSelectShow.png">
+ <img src="https://raw.githubusercontent.com/UmairAwan128/MERN-CRUD-Generator/master/images/catList.png?token=ANW5SW3OTBWP3O6QGISDG7K6KXRAA" hspace="20" width="360" alt="catList.png">
 
 ## Relation Types Supported
 Currently CRUD Generator supports the following relation types.
@@ -110,11 +120,11 @@ To generate your CRUD app the only thing you need is a json schema file in a spe
 and `tables[2].name` means on the second object of tables array there is a `name` property which has the error, the error is telling that `name` property value should be a string whose first letter should be capital.
 -  `instance.appSchema.tables[5].columns[1].required is not of a type(s) boolean`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `tables` array
 and `tables[5].columns[1].required` means on the fifth object of tables array there is a `columns` array whose first index has the `required` property which has the error, the error is telling that `required` property supports type `boolean` and its value can be either `true` or `false`. 
--  `invalid table name used on firstTable of instance.appSchema.relations[3], please specify name of table that you provided in scheema`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `firstTable of relations[3]` means on the third object of relations array there is a `firstTable` property which has the error, the error is telling that `firstTable` property value should be same as the `name` property of any of the `tables` array object of respective schema.
+-  `invalid table name used on firstTable of instance.appSchema.relations[3], please specify name of table that you provided in scheema `, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `firstTable of relations[3]` means on the third object of relations array there is a `firstTable` property which has the error, the error is telling that `firstTable` property value should be same as the `name` property of any of the `tables` array object of respective schema.
 -  `There can only be one relation between two tables, relation between Order and Product are defined twice on instance.appSchema.relations[3] and instance.appSchema.relations[4]` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `relations[n]` means a specific object of relations array and the error statement is telling that two relation object have same `firstTable` and `secondTable` value but have different `relationType` property value means you are trying to create multiple relations b/w two entities and it is not possible remove any of them to resole error.
--  `invalid column name used in secondTableColumn on instance.appSchema.relations[3], please specify name of column that exist in Product scheema.`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `firstTable of relations[3]` means on the third object of relations array there is a `secondTableColumn` property which has the error, the error is telling that `secondTableColumn` property value should be same as the `name` property of any of the `columns` array object of respective table you mentioned in the `secondTable` property. 
+-  `invalid column name used in secondTableColumn on instance.appSchema.relations[3], please specify name of column that exist in Product scheema .`, here `instance.appSchema` means first `instance` means your schema file and `appSchema` is the property of schema, and the complete error statement means inside the `appSchema` we have and `relations` array and `firstTable of relations[3]` means on the third object of relations array there is a `secondTableColumn` property which has the error, the error is telling that `secondTableColumn` property value should be same as the `name` property of any of the `columns` array object of respective table you mentioned in the `secondTable` property. 
 
-## Sample Scheema File
+## Sample Schema File
 
    The following is a sample schema for an Ecommerace Application and it uses all datatypes,relations and fearures supported.
 ```json
