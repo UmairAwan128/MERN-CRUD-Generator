@@ -37,7 +37,7 @@ class publicFilesServices {
 
   GenerateFaviconFile(folderPath) {
     try {
-      pngToIco("./icoFile/favicon.png")
+      pngToIco( __dirname + "../../../icoFile/favicon.png")
         .then(buf => {
           fs.writeFileSync(folderPath + "/" + "favicon.ico", buf);
           //console.log("sucessfully generated favicon file.");
