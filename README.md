@@ -1,5 +1,4 @@
 # MERN CRUD Generator
-
 The project is a node application that takes json schema as input and generate a MERN CRUD Application as output. The generated application contains React crud app, Node crud app with Express Api's and corresponding database in mongodb. The purpose of creating the project is
 1. To save developers time generating all the four CRUD functionalities for each Entity.
 2. Generate relations between these entities if there are any. 
@@ -11,9 +10,16 @@ To generate your MERN CRUD App the only thing you need is a json schema file in 
 npx mern-crud-generator
 ```
 This command shows a list of options asking for the kind of project you want to generate each of these is explained here [What Projects can be generated](https://www.npmjs.com/package/mern-crud-generator#what-projects-can-be-generated), you just need to run this command.
+Once you have generated your project the only thing you need is navigate to both React and Node project and run the following command,
+```sh
+npm install
+```
+This command will connect to npm and install the required dependency packages, once the packages are installed run the following command to start your application.
+```sh
+npm start
+```
 
 ## What Projects can be generated?
-
 1. User can generate a complete MERN CRUD application.This option generate two projects. 
    - **React Project** which contains create, update Forms and a List page having View and delete functionality for each entity. The Project also constains login, signUp and update user information form. check out [React Project Features](https://www.npmjs.com/package/mern-crud-generator#react-project-features) for details.
    - **Node project** which contains the database models,Express API endpoints for each entity and also creates the database in MongoDB check out [Node Project Features](https://www.npmjs.com/package/mern-crud-generator#node-project-features) for details.
