@@ -18,6 +18,7 @@ This command will connect to npm and install the required dependency packages, o
 ```sh
 npm start
 ```
+Or Just **watch this short video** to quickly generate your first CRUD app here, [Quickest way to use MERN CRUD Generator](https://youtu.be/i2ga0nGQFOE).
 
 ## What Projects can be generated?
 1. User can generate a complete MERN CRUD application.This option generate two projects. 
