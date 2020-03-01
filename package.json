@@ -1,6 +1,6 @@
 {
   "name": "mern-crud-generator",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A CLI that takes JSON scheema and helps in generating CRUD in React along with API in express and database in MongoDB",
   "bin": "src/index.js",
   "repository": {
