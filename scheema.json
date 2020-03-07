@@ -1,0 +1,141 @@
+{
+    "appName": "Ecomerace",
+    "appTheme": "dark",
+    "appDbName": "EcomeraceDb",
+    "appSchema": {
+        "tables": [
+            {
+                "name": "Product",
+                "columns": [
+                    {
+                        "name": "ProdName",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Price",
+                        "type": "number",
+                        "required": true
+                    }
+                    
+                ]
+            },
+            {
+                "name": "Category",
+                "columns": [
+                    {
+                        "name": "CatName",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "text",
+                        "required": false
+                    }
+                ]
+            },
+            {
+                "name": "Order",
+                "columns": [
+                    {
+                        "name": "OrderName",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "OrderDate",
+                        "type": "date",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Status",
+                "columns": [
+                    {
+                        "name": "StatName",
+                        "type": "text",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Customer",
+                "columns": [
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Email",
+                        "type": "email"
+                    },
+                    {
+                        "name": "Password",
+                        "type": "password"
+                    },
+                    {
+                        "name": "Phone",
+                        "type": "number",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Suplier",
+                "columns": [
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "Phone",
+                        "type": "number",
+                        "required": true
+                    }
+                ]
+            }
+        ],
+        "relations": [
+            {
+                "firstTable": "Product",
+                "secondTable": "Category",
+                "relationType": "oneToMany",
+                "secondTableColumn": "CatName"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "User",
+                "relationType": "select",
+                "secondTableColumn": "email"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "Status",
+                "relationType": "radio",
+                "secondTableColumn": "StatName"
+            },
+            {
+                "firstTable": "Order",
+                "secondTable": "Product",
+                "relationType": "checkBox",
+                "secondTableColumn": "ProdName"
+            },
+            {
+                "firstTable": "Customer",
+                "secondTable": "Order",
+                "relationType": "manyToMany",
+                "secondTableColumn": "OrderName"
+            },
+            {
+                "firstTable": "Suplier",
+                "secondTable": "Product",
+                "relationType": "multiselect",
+                "secondTableColumn": "ProdName"
+            }
+        ]
+    }
+}
